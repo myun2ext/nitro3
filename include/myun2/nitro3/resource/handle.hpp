@@ -11,10 +11,15 @@ namespace myun2
 			class handle
 			{
 			private:
-				T _handle;
+				struct holder
+				{
+					T h;
+					holder(const T& in_handle) : h(in_handle) {}
+				};
+				holder _handle;
 			public:
 				handle(){}
-				handle(const T in_handle) : _handle(in_handle) {}
+				handle(const T& in_handle) : _handle(in_handle) {}
 				virtual ~handle() {
 					_Releaser(in_handle);
 				}
