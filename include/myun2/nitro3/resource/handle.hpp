@@ -14,9 +14,12 @@ namespace myun2
 				struct holder
 				{
 					T h;
-					holder(const T& in_handle) : h(in_handle) {}
+					unsigned int referenced_count;
+
+					holder(){ referenced_count = 0; }
+					holder(const T& in_handle) : h(in_handle) { referenced_count = 0; }
 				};
-				holder _handle;
+				holder *p_holder;
 			public:
 				handle(){}
 				handle(const T& in_handle) : _handle(in_handle) {}
