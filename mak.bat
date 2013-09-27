@@ -1,3 +1,3 @@
-g++ nitrogen.cpp
+g++ -I include nitrogen.cpp
 a.exe
 pause
