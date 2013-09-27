@@ -9,6 +9,8 @@ namespace myun2
 		{
 			class injector
 			{
+			public:
+				void inject() { }
 			};
 		}
 	}
