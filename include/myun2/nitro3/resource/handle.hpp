@@ -18,13 +18,16 @@ namespace myun2
 
 					holder(){ referenced_count = 0; }
 					holder(const T& in_handle) : h(in_handle) { referenced_count = 0; }
+
+					static *holder allocate() { return new T; }
+					static *holder allocate(const T& in_handle) { return new T(in_handle); }
 				};
 				holder *p_holder;
 			public:
-				handle(){}
-				handle(const T& in_handle) : _handle(in_handle) {}
+				handle(){ p_holder = 0; }
+				handle(const T& in_handle) { p_holder = holder::allocate(in_handle); }
 				virtual ~handle() {
-					_Releaser(in_handle);
+					if ( p_holder != 0 ) _Releaser(in_handle);
 				}
 			};
 		}
