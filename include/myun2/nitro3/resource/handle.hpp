@@ -7,7 +7,7 @@ namespace myun2
 	{
 		namespace resource
 		{
-			template <typename T>
+			template <typename T, typename _Releaser>
 			class handle
 			{
 			private:
@@ -15,6 +15,9 @@ namespace myun2
 			public:
 				handle(){}
 				handle(const T in_handle) : _handle(in_handle) {}
+				virtual ~handle() {
+					_Releaser(in_handle);
+				}
 			};
 		}
 	}
