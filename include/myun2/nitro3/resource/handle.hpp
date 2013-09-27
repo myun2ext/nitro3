@@ -7,12 +7,14 @@ namespace myun2
 	{
 		namespace resource
 		{
-			template <typename T> class handle
+			template <typename T>
+			class handle
 			{
 			private:
 				T _handle;
 			public:
-				
+				handle(){}
+				handle(const T in_handle) : _handle(in_handle) {}
 			};
 		}
 	}
