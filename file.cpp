@@ -3,11 +3,16 @@
 
 using namespace myun2::nitro3::resource;
 
-void closer(FILE* fp) { fclose(fp); }
+struct closer{ closer(FILE* fp) { fclose(fp); } };
+//struct closer{ void operator()(FILE* fp) const { fclose(fp); } };
 
+template <typename A>
+void a(){ A(NULL); }
 int main()
 {
-	handle<FILE*, closer> h;
+	closer(NULL);
+
+	//handle<FILE*, closer> h;
 
 	return 0;
 }
