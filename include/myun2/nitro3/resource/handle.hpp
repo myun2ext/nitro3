@@ -26,8 +26,8 @@ namespace myun2
 							_Releaser(h);
 					}
 
-					static holder* allocate() { return new T; }
-					static holder* allocate(const T& in_handle) { return new T(in_handle); }
+					static holder* allocate() { return new holder(); }
+					static holder* allocate(const T& in_handle) { return new holder(in_handle); }
 				};
 				mutable holder *p_holder;
 				void increment_reference() const { p_holder->referenced_count++; }
