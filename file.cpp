@@ -3,7 +3,7 @@
 
 using namespace myun2::nitro3::resource;
 
-struct closer{ closer(FILE* fp) { fclose(fp); } };
+struct closer{ closer(FILE* fp) { fclose(fp); printf("N!\n"); } };
 //struct closer{ void operator()(FILE* fp) const { fclose(fp); } };
 
 template <typename A>
@@ -11,6 +11,7 @@ void a(){ A(NULL); }
 int main()
 {
 	closer(NULL);
+	a<closer>();
 
 	//handle<FILE*, closer> h;
 
