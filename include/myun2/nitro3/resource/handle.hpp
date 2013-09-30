@@ -30,8 +30,6 @@ namespace myun2
 					static holder* allocate(const T& in_handle) { return new holder(in_handle); }
 				};
 				mutable holder *p_holder;
-				void increment_reference() const { p_holder->referenced_count++; }
-				void decrement_reference() const { p_holder->referenced_count--; }
 				holder* holder_clone() const { p_holder->increment_reference(); return p_holder; }
 			public:
 				handle(){ p_holder = 0; }
