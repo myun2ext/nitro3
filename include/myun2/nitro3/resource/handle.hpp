@@ -19,8 +19,9 @@ namespace myun2
 					holder(){ referenced_count = 0; }
 					holder(const T& in_handle) : h(in_handle) { referenced_count = 0; }
 
-					void increment_reference() { referenced_count++; }
-					void decrement_reference() {
+					holder* clone() { add_reference(); this; }
+					void add_reference() { referenced_count++; }
+					void remove_reference() {
 						referenced_count--;
 						if ( referenced_count == 0 )
 							_Releaser(h);
@@ -30,12 +31,12 @@ namespace myun2
 					static holder* allocate(const T& in_handle) { return new holder(in_handle); }
 				};
 				mutable holder *p_holder;
-				holder* holder_clone() const { p_holder->increment_reference(); return p_holder; }
+				holder* clone() const { p_holder->add_reference(); return p_holder; }
 			public:
 				handle(){ p_holder = 0; }
-				handle(const T& in_handle) { p_holder = holder::allocate(in_handle); }
-				handle(const handle& in_handle) { p_holder = in_handle.holder_clone(); }
-				virtual ~handle() { if ( p_holder != 0 ) p_holder->decrement_reference(); }
+				handle(const T& in_handle) { p_holder = new holder(in_handle); }
+				handle(const handle& in_handle) { p_holder = in_handle.clone(); }
+				virtual ~handle() { if ( p_holder != 0 ) p_holder->remove_reference(); }
 			};
 		}
 	}
