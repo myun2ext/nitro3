@@ -24,7 +24,7 @@ namespace myun2
 					void remove_reference() {
 						referenced_count--;
 						if ( referenced_count == 0 )
-							_Releaser(h);
+							_Releaser x(h);
 					}
 
 					static holder* allocate() { return new holder(); }
