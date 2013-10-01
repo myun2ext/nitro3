@@ -19,6 +19,7 @@ namespace myun2
 				void seek_to_tail(){ fseek(fp, 0, SEEK_END); }
 				void seek_to(size_t pos){ fseek(fp, pos, SEEK_SET); }
 			public:
+				typedef unsigned long length_t;
 				typedef unsigned long index_t;
 
 				file_pool(const char* filename) { open(filename); }
@@ -26,11 +27,20 @@ namespace myun2
 					fp = fopen(filename, "r+wb");
 				}
 				index_t write(const char* s) { return write(s, strlen(s)); }
-				index_t write(const void* p, unsigned int length) {
-					
+				index_t write(const void* p, length_t length) {
+					seek_to_tail();
+					fwrite(length, sizeof(length_t), 1, fp);
+					fwrite(p, length, 1, fp);
 				}
 
-				::std::string read_str(index_t i) {  }
+				::std::string read_str(index_t i) {
+					seek_to(i);
+					length_t length;
+					fread(&length, sizeof(length_t), 1, fp);
+					::std::string s(length, 0);
+					fread((char*)s.data, length, 1, fp);
+					return s;
+				}
 				template <typename T> ::std::vector<T> read(index_t i) {}
 			};
 		}
