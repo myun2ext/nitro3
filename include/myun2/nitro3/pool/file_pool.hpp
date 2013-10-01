@@ -18,6 +18,8 @@ namespace myun2
 				bool open(const char* filename) {
 					fp = fopen(filename, "r+wb");
 				}
+				void write(const char* s) { write(s, strlen(s)); }
+				void write(void* p, unsigned int length) {}
 			};
 		}
 	}
