@@ -1,0 +1,17 @@
+#ifndef __github_com_myun2__nitro__pool__chunk_HPP__
+#define __github_com_myun2__nitro__pool__chunk_HPP__
+
+namespace myun2
+{
+	namespace nitro3
+	{
+		namespace pool
+		{
+			class chunk
+			{
+			};
+		}
+	}
+}
+
+#endif//__github_com_myun2__nitro__pool__chunk_HPP__
