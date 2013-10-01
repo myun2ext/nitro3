@@ -7,6 +7,10 @@ namespace myun2
 	{
 		namespace pool
 		{
+			class impl
+			{
+			};
+
 			class memory_pool;
 			class file_pool;
 		}
