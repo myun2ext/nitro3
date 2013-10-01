@@ -47,7 +47,7 @@ namespace myun2
 				///////////////////////
 
 				::std::string read_str(index_t i) {
-					long pos = seek_to(i);
+					seek_to(i);
 					length_t length;
 					fread(&length, sizeof(length_t), 1, fp);
 					::std::string s(length, 0);

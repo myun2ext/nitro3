@@ -8,8 +8,8 @@ typedef unsigned long lt;
 int main()
 {
 	file_pool p("a.db");
-	lt = p.write("aaa");
-	printf("%s\n", p.read_str(lt));
+	lt i = p.write("aaa");
+	printf("%s\n", p.read_str(i));
 
 	return 0;
 }
