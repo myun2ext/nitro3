@@ -26,12 +26,23 @@ namespace myun2
 				bool open(const char* filename) {
 					fp = fopen(filename, "r+wb");
 				}
+
+				///////////////////////
+
 				index_t write(const char* s) { return write(s, strlen(s)); }
 				index_t write(const void* p, length_t length) {
 					seek_to_tail();
 					fwrite(length, sizeof(length_t), 1, fp);
 					fwrite(p, length, 1, fp);
 				}
+
+				template <typename T>
+				index_t write(const T& v) {
+					seek_to_tail();
+					fwrite(&v, sizeof(v), 1, fp);
+				}
+
+				///////////////////////
 
 				::std::string read_str(index_t i) {
 					seek_to(i);
@@ -41,6 +52,15 @@ namespace myun2
 					fread((char*)s.data, length, 1, fp);
 					return s;
 				}
+
+				template <typename T>
+				T read(index_t i) {
+					seek_to(i);
+					T v;
+					fread(&v, sizeof(T), 1, fp);
+					return v;
+				}
+
 				template <typename T> ::std::vector<T> read(index_t i) {}
 			};
 		}
