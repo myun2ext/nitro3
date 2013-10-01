@@ -14,14 +14,14 @@ namespace myun2
 		{
 			class file_pool : public base
 			{
-			private:
-				FILE* fp;
-				void seek_to_tail(){ fseek(fp, 0, SEEK_END); }
-				void seek_to(size_t pos){ fseek(fp, pos, SEEK_SET); }
 			public:
 				typedef unsigned long length_t;
-				typedef unsigned long index_t;
-
+				typedef long index_t;
+			private:
+				FILE* fp;
+				index_t seek_to_tail(){ fseek(fp, 0, SEEK_END); return ftell(fp); }
+				void seek_to(size_t pos){ fseek(fp, pos, SEEK_SET); }
+			public:
 				file_pool(const char* filename) { open(filename); }
 				bool open(const char* filename) {
 					fp = fopen(filename, "r+wb");
@@ -31,21 +31,23 @@ namespace myun2
 
 				index_t write(const char* s) { return write(s, strlen(s)); }
 				index_t write(const void* p, length_t length) {
-					seek_to_tail();
+					index_t i = seek_to_tail();
 					fwrite(&length, sizeof(length_t), 1, fp);
 					fwrite(p, length, 1, fp);
+					return i;
 				}
 
 				template <typename T>
 				index_t write(const T& v) {
-					seek_to_tail();
+					index_t i = seek_to_tail();
 					fwrite(&v, sizeof(v), 1, fp);
+					return i;
 				}
 
 				///////////////////////
 
 				::std::string read_str(index_t i) {
-					seek_to(i);
+					long pos = seek_to(i);
 					length_t length;
 					fread(&length, sizeof(length_t), 1, fp);
 					::std::string s(length, 0);
