@@ -10,11 +10,11 @@ namespace myun2
 			class impl
 			{
 			};
-
-			class memory_pool;
-			class file_pool;
 		}
 	}
 }
+
+#include "myun2/nitro3/pool/memory_pool.hpp"
+#include "myun2/nitro3/pool/file_pool.hpp"
 
 #endif//__github_com_myun2__nitro__pool_HPP__
