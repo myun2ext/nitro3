@@ -2,6 +2,8 @@
 #define __github_com_myun2__nitro__file_pool_HPP__
 
 #include "myun2/nitro3/pool/core.hpp"
+#include <string>
+#include <vector>
 
 namespace myun2
 {
@@ -14,12 +16,17 @@ namespace myun2
 			private:
 				FILE* fp;
 			public*
+				typedef unsigned long index_t;
+
 				file_pool(const char* filename) { open(filename); }
 				bool open(const char* filename) {
 					fp = fopen(filename, "r+wb");
 				}
-				void write(const char* s) { write(s, strlen(s)); }
-				void write(void* p, unsigned int length) {}
+				index_t write(const char* s) { return write(s, strlen(s)); }
+				index_t write(void* p, unsigned int length) {}
+
+				::std::string read_str(index_t i) {  }
+				template <typename T> ::std::vector<T> read<T>(index_t i) {}
 			};
 		}
 	}
