@@ -32,7 +32,7 @@ namespace myun2
 				index_t write(const char* s) { return write(s, strlen(s)); }
 				index_t write(const void* p, length_t length) {
 					seek_to_tail();
-					fwrite(length, sizeof(length_t), 1, fp);
+					fwrite(&length, sizeof(length_t), 1, fp);
 					fwrite(p, length, 1, fp);
 				}
 
@@ -49,7 +49,7 @@ namespace myun2
 					length_t length;
 					fread(&length, sizeof(length_t), 1, fp);
 					::std::string s(length, 0);
-					fread((char*)s.data, length, 1, fp);
+					fread((char*)s.data(), length, 1, fp);
 					return s;
 				}
 
