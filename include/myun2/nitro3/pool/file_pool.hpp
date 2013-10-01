@@ -61,7 +61,7 @@ namespace myun2
 					return v;
 				}
 
-				template <typename T> ::std::vector<T> read(index_t i) {}
+				//template <typename T> ::std::vector<T> read_vector(index_t i) {}
 			};
 		}
 	}
