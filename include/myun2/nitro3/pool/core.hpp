@@ -7,6 +7,9 @@ namespace myun2
 	{
 		namespace pool
 		{
+			class base
+			{
+			};
 		}
 	}
 }

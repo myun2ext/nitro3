@@ -1,6 +1,8 @@
 #ifndef __github_com_myun2__nitro__file_pool_HPP__
 #define __github_com_myun2__nitro__file_pool_HPP__
 
+#include "myun2/nitro3/pool/core.hpp"
+
 namespace myun2
 {
 	namespace nitro3
