@@ -9,8 +9,15 @@ namespace myun2
 	{
 		namespace pool
 		{
-			class file_pool
+			class file_pool : public core
 			{
+			private:
+				FILE* fp;
+			public*
+				file_pool(const char* filename) { open(filename); }
+				bool open(const char* filename) {
+					fp = fopen(filename, "r+wb");
+				}
 			};
 		}
 	}
