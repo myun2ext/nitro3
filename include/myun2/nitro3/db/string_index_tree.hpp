@@ -7,7 +7,7 @@ namespace myun2
 	{
 		namespace db
 		{
-			template <typename _Impl, typename _Value>
+			template <typename _Impl, typename _Value, unsigned int _PageBits=8>
 			class string_index_tree
 			{
 			public:
