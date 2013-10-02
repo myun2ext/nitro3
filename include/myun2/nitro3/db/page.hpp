@@ -12,45 +12,28 @@ namespace myun2
 			{
 			public:
 				typedef unsigned int index_t;
+				typedef unsigned int hash_t;
 			private:
 				_IndexFile& _index;
+				unsigned int page_head;
+
+				hash_t key_to_index(const void* key, unsigned int key_length) {
+					return *key;
+				}
 			public:
-				page(_IndexFile& index) : _index(index) {}
+				page(_IndexFile& index, unsigned int page_head_in) : _index(index), page_head(page_head_in) {}
 
 				///////////////////////
 
-				index_t add(const char* key, const &_Value v) { return add(key, strlen(key), v); }
-				index_t add(const void* key, unsigned int key_length, const &_Value v) {
-					return _impl.write(p, length);
+				index_t write(const char* key, const &_Value v) { return write(key, strlen(key), v); }
+				index_t write(const void* key, unsigned int key_length, const &_Value v) {
+					return _impl.write(page_head_in + key_to_index(key, key_length), v);
 				}
 
-				template <typename T>
-				id_t update(id_t i, const T& v) {
-					seek_to(i);
-					fwrite(&v, sizeof(v), 1, fp);
-					return i;
+				_Value read(const char* key) { return read(key, strlen(key)); }
+				_Value read(const void* key, unsigned int key_length) {
+					return _impl.read(page_head_in + key_to_index(key, key_length));
 				}
-
-				///////////////////////
-
-				::std::string read_str(id_t i) {
-					seek_to(i);
-					length_t length;
-					fread(&length, sizeof(length_t), 1, fp);
-					::std::string s(length, 0);
-					fread((char*)s.data(), length, 1, fp);
-					return s;
-				}
-
-				template <typename T>
-				T read(id_t i) {
-					seek_to(i);
-					T v;
-					fread(&v, sizeof(T), 1, fp);
-					return v;
-				}
-
-				//template <typename T> ::std::vector<T> read_vector(id_t i) {}
 			};
 		}
 	}
