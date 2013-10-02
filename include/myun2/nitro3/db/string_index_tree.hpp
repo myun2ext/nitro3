@@ -1,6 +1,9 @@
 #ifndef __github_com_myun2__nitro__db__string_index_tree_HPP__
 #define __github_com_myun2__nitro__db__string_index_tree_HPP__
 
+#include "myun2/nitro3/db/string_to_hash.hpp"
+#include "myun2/nitro3/db/page.hpp"
+
 namespace myun2
 {
 	namespace nitro3
@@ -13,32 +16,20 @@ namespace myun2
 			public:
 				typedef unsigned int index_t;
 			private:
+				page *root_page;
 				_Impl _impl;
+				
+				void open() {
+					root_page = new root_page(_impl);
+				}
 			public:
-				string_index_tree(const char* filename) : _impl(filename) {}
+				string_index_tree(const char* filename) : _impl(filename) { open(); }
 
 				///////////////////////
 
-				index_t add(const char* key, const &_Value v) { return add(key, strlen(key)); }
+				index_t add(const char* key, const &_Value v) { return add(key, strlen(key), v); }
 				index_t add(const void* key, unsigned int key_length, const &_Value v) {
 					return _impl.write(p, length);
-				}
-
-				///////////////////////
-
-				/*  safe...?  */
-				id_t update(id_t i, const char* s) { return update(i, s, strlen(s)); }
-				id_t update(id_t i, const void* p, length_t update_length) {
-					seek_to(i);
-					length_t length;
-					fread(&length, sizeof(length_t), 1, fp);
-					if ( update_length == length ) {
-						fwrite(p, length, 1, fp);
-						return i;
-					}
-					else
-						throw file_pool_update_length_unmatched();
-						//return -1;
 				}
 
 				template <typename T>
