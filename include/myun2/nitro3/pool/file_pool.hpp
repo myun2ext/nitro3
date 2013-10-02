@@ -57,6 +57,28 @@ namespace myun2
 
 				///////////////////////
 
+				/*  safe...?  */
+				index_t update(index_t i, const char* s) { return write(s, strlen(s)); }
+				index_t update(index_t i, const void* p, length_t update_length) {
+					seek_to(i);
+					fwrite(&length, sizeof(length_t), 1, fp);
+					if ( update_length == length ) {
+						fwrite(p, length, 1, fp);
+						return i;
+					}
+					else
+						return -1;
+				}
+
+				template <typename T>
+				index_t update(index_t i, const T& v) {
+					seek_to(i);
+					fwrite(&v, sizeof(v), 1, fp);
+					return i;
+				}
+
+				///////////////////////
+
 				::std::string read_str(index_t i) {
 					seek_to(i);
 					length_t length;
