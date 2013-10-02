@@ -7,7 +7,7 @@ namespace myun2
 	{
 		namespace db
 		{
-			template <typename _Impl>
+			template <typename _Impl, typename _Value>
 			class string_index_tree
 			{
 			public:
@@ -19,17 +19,9 @@ namespace myun2
 
 				///////////////////////
 
-				index_t add(const void* ) { return write(s, strlen(s)); }
-				id_t write(const void* p, length_t length) {
-					index_t i = _body.write(p, length);
-					return _body.write(p, length);
-				}
-
-				template <typename T>
-				id_t write(const T& v) {
-					id_t i = seek_to_tail();
-					fwrite(&v, sizeof(v), 1, fp);
-					return i;
+				index_t add(const char* key, const &_Value v) { return add(key, strlen(key)); }
+				index_t add(const void* key, unsigned int key_length, const &_Value v) {
+					return _impl.write(p, length);
 				}
 
 				///////////////////////
