@@ -8,8 +8,11 @@ typedef unsigned long lt;
 int main()
 {
 	file_pool p("a.db");
-	lt i = p.write("aaa");
+	lt i = p.write("abc");
 	printf("[%d] %s\n", i, p.read_str(i).c_str());
+
+	p.update(0, "jdk");
+	printf("[%d] %s\n", 0, p.read_str(0).c_str());
 
 	return 0;
 }

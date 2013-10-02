@@ -17,6 +17,7 @@ namespace myun2
 		namespace pool
 		{
 			struct file_pool_exception {};
+			struct file_pool_update_length_unmatched {};
 
 			class file_pool : public base
 			{
@@ -58,16 +59,18 @@ namespace myun2
 				///////////////////////
 
 				/*  safe...?  */
-				index_t update(index_t i, const char* s) { return write(s, strlen(s)); }
+				index_t update(index_t i, const char* s) { return update(i, s, strlen(s)); }
 				index_t update(index_t i, const void* p, length_t update_length) {
 					seek_to(i);
-					fwrite(&length, sizeof(length_t), 1, fp);
+					length_t length;
+					fread(&length, sizeof(length_t), 1, fp);
 					if ( update_length == length ) {
 						fwrite(p, length, 1, fp);
 						return i;
 					}
 					else
-						return -1;
+						throw file_pool_update_length_unmatched();
+						//return -1;
 				}
 
 				template <typename T>
