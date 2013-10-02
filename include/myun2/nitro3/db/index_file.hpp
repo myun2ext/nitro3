@@ -9,25 +9,25 @@ namespace myun2
 	{
 		namespace db
 		{
-			template <typename _FileImpl>
+			template <typename _Body, typename _FileImpl>
 			class index_file
 			{
 			public:
 				typedef unsigned long length_t;
+				typedef _FileImpl::index_t index_t;
 				typedef int id_t;
 			private:
+				_Body &_body;
 				_FileImpl _impl;
 			public:
-				index_file(const char* filename) : _impl(filename) {}
+				index_file(_Body& body, const char* filename) : _body(body), _impl(filename) {}
 
 				///////////////////////
 
 				id_t write(const char* s) { return write(s, strlen(s)); }
 				id_t write(const void* p, length_t length) {
-					id_t i = seek_to_tail();
-					fwrite(&length, sizeof(length_t), 1, fp);
-					fwrite(p, length, 1, fp);
-					return i;
+					index_t i = _body.write(p, length);
+					return _body.write(p, length);
 				}
 
 				template <typename T>
