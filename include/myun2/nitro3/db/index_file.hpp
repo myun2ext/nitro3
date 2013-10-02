@@ -12,6 +12,9 @@ namespace myun2
 			template <typename _FileImpl>
 			class index_file
 			{
+			public:
+				typedef unsigned long length_t;
+				typedef int id_t;
 			private:
 				_FileImpl _impl;
 			public:
@@ -19,17 +22,17 @@ namespace myun2
 
 				///////////////////////
 
-				index_t write(const char* s) { return write(s, strlen(s)); }
-				index_t write(const void* p, length_t length) {
-					index_t i = seek_to_tail();
+				id_t write(const char* s) { return write(s, strlen(s)); }
+				id_t write(const void* p, length_t length) {
+					id_t i = seek_to_tail();
 					fwrite(&length, sizeof(length_t), 1, fp);
 					fwrite(p, length, 1, fp);
 					return i;
 				}
 
 				template <typename T>
-				index_t write(const T& v) {
-					index_t i = seek_to_tail();
+				id_t write(const T& v) {
+					id_t i = seek_to_tail();
 					fwrite(&v, sizeof(v), 1, fp);
 					return i;
 				}
@@ -37,8 +40,8 @@ namespace myun2
 				///////////////////////
 
 				/*  safe...?  */
-				index_t update(index_t i, const char* s) { return update(i, s, strlen(s)); }
-				index_t update(index_t i, const void* p, length_t update_length) {
+				id_t update(id_t i, const char* s) { return update(i, s, strlen(s)); }
+				id_t update(id_t i, const void* p, length_t update_length) {
 					seek_to(i);
 					length_t length;
 					fread(&length, sizeof(length_t), 1, fp);
@@ -52,7 +55,7 @@ namespace myun2
 				}
 
 				template <typename T>
-				index_t update(index_t i, const T& v) {
+				id_t update(id_t i, const T& v) {
 					seek_to(i);
 					fwrite(&v, sizeof(v), 1, fp);
 					return i;
@@ -60,7 +63,7 @@ namespace myun2
 
 				///////////////////////
 
-				::std::string read_str(index_t i) {
+				::std::string read_str(id_t i) {
 					seek_to(i);
 					length_t length;
 					fread(&length, sizeof(length_t), 1, fp);
@@ -70,14 +73,14 @@ namespace myun2
 				}
 
 				template <typename T>
-				T read(index_t i) {
+				T read(id_t i) {
 					seek_to(i);
 					T v;
 					fread(&v, sizeof(T), 1, fp);
 					return v;
 				}
 
-				//template <typename T> ::std::vector<T> read_vector(index_t i) {}
+				//template <typename T> ::std::vector<T> read_vector(id_t i) {}
 			};
 		}
 	}
