@@ -9,7 +9,7 @@ int main()
 {
 	file_pool p("a.db");
 	lt i = p.write("aaa");
-	printf("%s\n", p.read_str(i));
+	printf("[%d] %s\n", i, p.read_str(i).c_str());
 
 	return 0;
 }

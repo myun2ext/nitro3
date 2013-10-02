@@ -1,6 +1,10 @@
 #ifndef __github_com_myun2__nitro__file_pool_HPP__
 #define __github_com_myun2__nitro__file_pool_HPP__
 
+#include <io.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "myun2/nitro3/pool/core.hpp"
 #include <string.h> // use strlen()
 #include <string>
@@ -12,6 +16,8 @@ namespace myun2
 	{
 		namespace pool
 		{
+			struct file_pool_exception {};
+
 			class file_pool : public base
 			{
 			public:
@@ -24,7 +30,12 @@ namespace myun2
 			public:
 				file_pool(const char* filename) { open(filename); }
 				bool open(const char* filename) {
-					fp = fopen(filename, "r+wb");
+					if ( _access(filename, F_OK) == 0 )
+						fp = fopen(filename, "r+b");
+					else
+						fp = fopen(filename, "w+b");
+					if ( fp == NULL )
+						throw file_pool_exception();
 				}
 
 				///////////////////////
