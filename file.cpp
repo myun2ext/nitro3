@@ -9,6 +9,7 @@ int main()
 	file f("test.dat");
 	f.write("aaaa");
 	f.write("bbbb");
+	printf("%s\n", f.read_str(2, 8).c_str());
 
 	return 0;
 }

@@ -45,12 +45,14 @@ namespace myun2
 
 			template <typename T>
 			size_t write(const T& v) {
-				return fwrite(&v, sizeof(v), 1, fp);
+				return write(&v, sizeof(v));
 			}
 
 			////
 
-			size_t write(long i, const char* s) { return write(i, s, strlen(s)); }
+			size_t write(long i, const char* s) {
+				return write(i, s, strlen(s)); 
+			}
 			size_t write(long i, const void* p, size_t length) {
 				seek_to(i);
 				return write(p, length);
@@ -58,30 +60,44 @@ namespace myun2
 
 			template <typename T>
 			size_t write(long i, const T& v) {
-				seek_to(i);
-				return write(v);
+				return write(i, &v, sizeof(v));
 			}
 
 			///////////////////////
 
-			::std::string read_str(long i, size_t length) {
-				seek_to(i);
+			::std::string read_str(size_t length) {
 				::std::string s(length, 0);
 				fread((char*)s.data(), length, 1, fp);
 				return s;
 			}
 
+			size_t read(void* buf, size_t length) {
+				return fread(buf, length, 1, fp);
+			}
+
+			template <typename T>
+			T read() {
+				T v;
+				fread(&v, sizeof(T), 1, fp);
+				return v;
+			}
+
+			////
+
+			::std::string read_str(long i, size_t length) {
+				seek_to(i);
+				return read_str(length);
+			}
+
 			size_t read(long i, void* buf, size_t length) {
 				seek_to(i);
-				return fread(buf, length, 1, fp);
+				return read(buf, length);
 			}
 
 			template <typename T>
 			T read(long i) {
 				seek_to(i);
-				T v;
-				fread(&v, sizeof(T), 1, fp);
-				return v;
+				return read<T>();
 			}
 		};
 	}
