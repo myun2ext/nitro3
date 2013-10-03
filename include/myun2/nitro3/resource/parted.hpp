@@ -9,7 +9,7 @@ namespace myun2
 		{
 			struct parted_over_limit_exception {};
 
-			template <typename Impl, typename IndexType>
+			template <typename Impl, typename IndexType=size_t>
 			class parted : public Impl
 			{
 			private:
@@ -26,10 +26,16 @@ namespace myun2
 
 				//
 
-				virtual void limit_assert(long pos){
+				void limit_assert(long pos){
 					if ( pos > end )
 						throw parted_over_limit_exception();
 				}
+
+				/*size_t write(long i, const void* p, size_t length) {
+					if ( i + length > end )
+						throw parted_over_limit_exception();
+					return _Base::write(i, p, length);
+				}*/
 
 				size_t seek_to_tail(){ _Base::seek_to(end); return end; }
 				void seek_to(long pos){

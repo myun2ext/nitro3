@@ -41,7 +41,7 @@ namespace myun2
 
 			size_t write(const char* s) { return write(s, strlen(s)); }
 			size_t write(const void* p, size_t length) {
-				limit_assert(ftell(fp));
+				limit_assert(ftell(fp) + length);
 				return fwrite(p, length, 1, fp);
 			}
 
@@ -55,7 +55,7 @@ namespace myun2
 			size_t write(long i, const char* s) {
 				return write(i, s, strlen(s)); 
 			}
-			size_t write(long i, const void* p, size_t length) {
+			virtual size_t write(long i, const void* p, size_t length) {
 				seek_to(i);
 				return write(p, length);
 			}
