@@ -13,8 +13,10 @@ namespace myun2
 			public:
 				typedef unsigned int index_t;
 			private:
-				typedef _Impl _StringsFile strings_file;
-				typedef _Impl _IndexFile index_file;
+				typedef _Impl _StringsFile;
+				typedef _Impl _IndexFile;
+				_StringsFile strings_file;
+				_IndexFile index_file;
 			public:
 				string_index_file(const char* strings_filename, const char* index_filename)
 					: strings_file(strings_filename), index_file(index_filename) {}
