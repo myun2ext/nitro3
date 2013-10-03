@@ -13,11 +13,9 @@ namespace myun2
 			public:
 				typedef unsigned int index_t;
 			private:
-				typedef page<_Impl, _Value> _Page;
-				_Page root_page;
 				_Impl _impl;
 			public:
-				string_index_tree(const char* filename) : _impl(filename), root_page(_impl) {}
+				string_index_file(const char* filename) : _impl(filename) {}
 
 				///////////////////////
 /*
