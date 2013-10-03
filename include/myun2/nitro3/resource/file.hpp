@@ -35,28 +35,31 @@ namespace myun2
 			///////////////////////
 
 			size_t write(const char* s) { return write(s, strlen(s)); }
-			size_t write(const void* p, length_t length) {
-				size_t i = seek_to_tail();
-				fwrite(&length, sizeof(length_t), 1, fp);
+			size_t write(const void* p, size_t length) {
+				seek_to(i);
 				fwrite(p, length, 1, fp);
 				return i;
 			}
 
 			template <typename T>
 			size_t write(const T& v) {
-				size_t i = seek_to_tail();
+				seek_to(i);
 				fwrite(&v, sizeof(v), 1, fp);
 				return i;
 			}
 
 			///////////////////////
 
-			::std::string read_str(size_t i) {
+			::std::string read_str(size_t i, size_t length) {
 				seek_to(i);
-				length_t length;
-				fread(&length, sizeof(length_t), 1, fp);
 				::std::string s(length, 0);
 				fread((char*)s.data(), length, 1, fp);
+				return s;
+			}
+
+			size_t read(size_t i, void* buf, size_t length) {
+				seek_to(i);
+				fread(buf, length, 1, fp);
 				return s;
 			}
 
