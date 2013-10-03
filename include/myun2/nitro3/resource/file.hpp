@@ -20,7 +20,7 @@ namespace myun2
 		private:
 			FILE* fp;
 			size_t seek_to_tail(){ fseek(fp, 0, SEEK_END); return ftell(fp); }
-			void seek_to(size_t pos){ fseek(fp, pos, SEEK_SET); }
+			void seek_to(long pos){ fseek(fp, pos, SEEK_SET); }
 		public:
 			file(const char* filename) { open(filename); }
 			bool open(const char* filename) {
@@ -34,15 +34,15 @@ namespace myun2
 
 			///////////////////////
 
-			size_t write(const char* s) { return write(s, strlen(s)); }
-			size_t write(const void* p, size_t length) {
+			size_t write(long i, const char* s) { return write(i, s, strlen(s)); }
+			size_t write(long i, const void* p, size_t length) {
 				seek_to(i);
 				fwrite(p, length, 1, fp);
 				return i;
 			}
 
 			template <typename T>
-			size_t write(const T& v) {
+			size_t write(long i, const T& v) {
 				seek_to(i);
 				fwrite(&v, sizeof(v), 1, fp);
 				return i;
@@ -50,21 +50,20 @@ namespace myun2
 
 			///////////////////////
 
-			::std::string read_str(size_t i, size_t length) {
+			::std::string read_str(long i, size_t length) {
 				seek_to(i);
 				::std::string s(length, 0);
 				fread((char*)s.data(), length, 1, fp);
 				return s;
 			}
 
-			size_t read(size_t i, void* buf, size_t length) {
+			size_t read(long i, void* buf, size_t length) {
 				seek_to(i);
-				fread(buf, length, 1, fp);
-				return s;
+				return fread(buf, length, 1, fp);
 			}
 
 			template <typename T>
-			T read(size_t i) {
+			T read(long i) {
 				seek_to(i);
 				T v;
 				fread(&v, sizeof(T), 1, fp);

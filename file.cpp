@@ -1,7 +1,5 @@
 #include <stdio.h>
-#include "myun2/nitro3/db/string_index_tree.hpp"
-
-using myun2::nitro3::db::string_index_tree;
+#include "myun2/nitro3/resource/file.hpp"
 
 int main()
 {
