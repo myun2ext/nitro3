@@ -7,10 +7,10 @@ namespace myun2
 	{
 		namespace db
 		{
-			template <unsigned int hash_bits, typename T=unsigned int>
+			/*template <unsigned int hash_bits, typename T=unsigned int>
 			T string_to_hash(const void* s, unsigned int length)
 			{
-			}
+			}*/
 		}
 	}
 }

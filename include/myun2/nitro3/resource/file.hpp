@@ -67,8 +67,6 @@ namespace myun2
 				fread(&v, sizeof(T), 1, fp);
 				return v;
 			}
-
-			//template <typename T> ::std::vector<T> read_vector(size_t i) {}
 		};
 	}
 }

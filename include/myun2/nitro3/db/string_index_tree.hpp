@@ -16,19 +16,16 @@ namespace myun2
 			public:
 				typedef unsigned int index_t;
 			private:
-				page *root_page;
+				typedef page<_Impl, _Value> _Page;
+				_Page root_page;
 				_Impl _impl;
-				
-				void open() {
-					root_page = new root_page(_impl);
-				}
 			public:
-				string_index_tree(const char* filename) : _impl(filename) { open(); }
+				string_index_tree(const char* filename) : _impl(filename), root_page(_impl) {}
 
 				///////////////////////
-
-				index_t add(const char* key, const &_Value v) { return add(key, strlen(key), v); }
-				index_t add(const void* key, unsigned int key_length, const &_Value v) {
+/*
+				index_t add(const char* key, const _Value& v) { return add(key, strlen(key), v); }
+				index_t add(const void* key, unsigned int key_length, const _Value& v) {
 					return _impl.write(p, length);
 				}
 
@@ -57,8 +54,7 @@ namespace myun2
 					fread(&v, sizeof(T), 1, fp);
 					return v;
 				}
-
-				//template <typename T> ::std::vector<T> read_vector(id_t i) {}
+*/
 			};
 		}
 	}
