@@ -13,10 +13,12 @@ namespace myun2
 			public:
 				typedef unsigned int index_t;
 			private:
-				_Impl _impl;
+				typedef _Impl _StringsFile strings_file;
+				typedef _Impl _IndexFile index_file;
 			public:
-				string_index_file(const char* filename) : _impl(filename) {}
-
+				string_index_file(const char* strings_filename, const char* index_filename)
+					: strings_file(strings_filename), index_file(index_filename) {}
+				
 				///////////////////////
 /*
 				index_t add(const char* key, const _Value& v) { return add(key, strlen(key), v); }
