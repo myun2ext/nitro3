@@ -24,6 +24,13 @@ namespace myun2
 				parted(const IndexType &_start, const IndexType &_end, const T& v)
 					: _Base(v), start(_start), end(_end)  {}
 
+				//
+
+				virtual void limit_assert(long pos){
+					if ( pos > end )
+						throw parted_over_limit_exception();
+				}
+
 				size_t seek_to_tail(){ _Base::seek_to(end); return end; }
 				void seek_to(long pos){
 					if ( pos > end )

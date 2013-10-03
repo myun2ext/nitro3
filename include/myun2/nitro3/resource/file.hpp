@@ -35,11 +35,13 @@ namespace myun2
 
 			virtual size_t seek_to_tail(){ fseek(fp, 0, SEEK_END); return ftell(fp); }
 			virtual void seek_to(long pos){ fseek(fp, pos, SEEK_SET); }
+			virtual void limit_assert(long pos){}
 
 			///////////////////////
 
 			size_t write(const char* s) { return write(s, strlen(s)); }
 			size_t write(const void* p, size_t length) {
+				limit_assert(ftell(fp));
 				return fwrite(p, length, 1, fp);
 			}
 
