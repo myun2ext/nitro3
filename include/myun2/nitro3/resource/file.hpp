@@ -33,8 +33,8 @@ namespace myun2
 					throw file_open_failed();
 			}
 
-			size_t seek_to_tail(){ fseek(fp, 0, SEEK_END); return ftell(fp); }
-			void seek_to(long pos){ fseek(fp, pos, SEEK_SET); }
+			virtual size_t seek_to_tail(){ fseek(fp, 0, SEEK_END); return ftell(fp); }
+			virtual void seek_to(long pos){ fseek(fp, pos, SEEK_SET); }
 
 			///////////////////////
 
