@@ -19,33 +19,47 @@ namespace myun2
 		{
 		private:
 			FILE* fp;
-			size_t seek_to_tail(){ fseek(fp, 0, SEEK_END); return ftell(fp); }
-			void seek_to(long pos){ fseek(fp, pos, SEEK_SET); }
 		public:
+			file() : fp(NULL) {}
 			file(const char* filename) { open(filename); }
 			bool open(const char* filename) {
-				if ( _access(filename, F_OK) == 0 )
+				if ( _access(filename, F_OK) == 0 ){
 					fp = fopen(filename, "r+b");
+					seek_to_tail();
+				}
 				else
 					fp = fopen(filename, "w+b");
 				if ( fp == NULL )
 					throw file_open_failed();
 			}
 
+			size_t seek_to_tail(){ fseek(fp, 0, SEEK_END); return ftell(fp); }
+			void seek_to(long pos){ fseek(fp, pos, SEEK_SET); }
+
 			///////////////////////
+
+			size_t write(const char* s) { return write(s, strlen(s)); }
+			size_t write(const void* p, size_t length) {
+				return fwrite(p, length, 1, fp);
+			}
+
+			template <typename T>
+			size_t write(const T& v) {
+				return fwrite(&v, sizeof(v), 1, fp);
+			}
+
+			////
 
 			size_t write(long i, const char* s) { return write(i, s, strlen(s)); }
 			size_t write(long i, const void* p, size_t length) {
 				seek_to(i);
-				fwrite(p, length, 1, fp);
-				return i;
+				return write(p, length);
 			}
 
 			template <typename T>
 			size_t write(long i, const T& v) {
 				seek_to(i);
-				fwrite(&v, sizeof(v), 1, fp);
-				return i;
+				return write(v);
 			}
 
 			///////////////////////
