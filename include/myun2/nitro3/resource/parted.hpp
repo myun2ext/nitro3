@@ -7,7 +7,9 @@ namespace myun2
 	{
 		namespace resource
 		{
-			struct parted_over_limit_exception {};
+			struct parted_write_over_limit_exception { size_t pos; size_t end;
+				parted_write_over_limit_exception(size_t _pos, size_t _end) : pos(_pos), end(_end) {}
+			};
 
 			template <typename Impl, typename IndexType=size_t>
 			class parted : public Impl
@@ -28,19 +30,19 @@ namespace myun2
 
 				void limit_assert(long pos){
 					if ( pos > end )
-						throw parted_over_limit_exception();
+						throw parted_write_over_limit_exception(pos, end);
 				}
 
 				/*size_t write(long i, const void* p, size_t length) {
 					if ( i + length > end )
-						throw parted_over_limit_exception();
+						throw parted_write_over_limit_exception();
 					return _Base::write(i, p, length);
 				}*/
 
 				size_t seek_to_tail(){ _Base::seek_to(end); return end; }
 				void seek_to(long pos){
 					if ( pos > end )
-						throw parted_over_limit_exception();
+						throw parted_write_over_limit_exception(pos, end);
 					_Base::seek_to(start + pos);
 				}
 			};
