@@ -7,6 +7,8 @@ namespace myun2
 	{
 		namespace resource
 		{
+			struct parted_over_limit_exception {};
+
 			template <typename Impl, typename IndexType>
 			class parted : public Impl
 			{
@@ -23,7 +25,11 @@ namespace myun2
 					: _Base(v), start(_start), end(_end)  {}
 
 				size_t seek_to_tail(){ _Base::seek_to(end); return end; }
-				void seek_to(long pos){ _Base::seek_to(pos); }
+				void seek_to(long pos){
+					if ( pos > end )
+						throw parted_over_limit_exception();
+					_Base::seek_to(start + pos);
+				}
 			};
 		}
 	}
