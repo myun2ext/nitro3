@@ -9,7 +9,7 @@ namespace myun2
 	{
 		namespace db
 		{
-			template <typename _Impl>
+			template <typename _Impl, unsigned int _PageSize=128>
 			class string_index_page
 			{
 			public:
