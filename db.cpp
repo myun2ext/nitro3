@@ -7,7 +7,13 @@ using namespace myun2::nitro3::db;
 
 int main()
 {
-	int hash = string_to_hash("abc");
+	int hash = string_to_hash("a");
+	printf("%d\n", hash);
+	hash = string_to_hash("aabc");
+	printf("%d\n", hash);
+	hash = string_to_hash("334");
+	printf("%d\n", hash);
+	hash = string_to_hash("test.example.aabd");
 	printf("%d\n", hash);
 
 	return 0;
