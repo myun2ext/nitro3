@@ -99,6 +99,18 @@ namespace myun2
 					return v;
 				}
 
+				//******************
+
+				void _read(index_t i, void* p, size_t length) {
+					seek_to(i);
+					fread(p, length, 1, fp);
+				}
+
+				void _write(index_t i, const void* p, size_t length) {
+					seek_to(i);
+					fwrite(p, length, 1, fp);
+				}
+
 				//template <typename T> ::std::vector<T> read_vector(index_t i) {}
 			};
 		}

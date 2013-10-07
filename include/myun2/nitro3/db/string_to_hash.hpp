@@ -9,7 +9,6 @@ namespace myun2
 	{
 		namespace db
 		{
-
 			template <typename _ResultT>
 			_ResultT string_to_hash(const void* s, unsigned int length)
 			{
@@ -24,7 +23,7 @@ namespace myun2
 			}
 
 			unsigned int string_to_hash(const void* s, unsigned int length) {
-				return string_to_hash<unsigned int> (s, length);
+				return string_to_hash<unsigned int>(s, length);
 			}
 
 			unsigned int string_to_hash(const char* s) {

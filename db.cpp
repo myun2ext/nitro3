@@ -16,5 +16,8 @@ int main()
 	hash = string_to_hash("test.example.aabd");
 	printf("%08X\n", hash);
 
+	file_pool page("index");
+	string_index_page<file_pool> index_page(page);
+
 	return 0;
 }
