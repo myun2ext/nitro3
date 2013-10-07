@@ -17,7 +17,7 @@ namespace myun2
 				const unsigned char* tail = p + length;
 				_ResultT r = 0;
 
-				for(; p != s; p++) {
+				for(; p != tail; p++) {
 					r += *p;
 				}
 				return r;
