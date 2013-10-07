@@ -9,14 +9,19 @@ namespace myun2
 	{
 		namespace db
 		{
-			template <typename _Impl, unsigned int _PageSize=128>
+			template <typename _Impl, unsigned int _PageSize=16>
 			class string_index_page
 			{
 			public:
-				typedef _Impl::index_t index_t;
+				typedef typename _Impl::index_t index_t;
 				typedef unsigned int hash_t;
 			private:
 				_Impl& file;
+
+				unsigned int pages[_PageSize];
+				void read_page() {
+					pages = file.read<unsigned int [_PageSize]>(0);
+				}
 			public:
 				string_index_page(_Impl& _file) : file(_file) {}
 
@@ -26,11 +31,6 @@ namespace myun2
 
 				index_t add(const char* key) {
 					file.write(key_to_index(key));
-				}
-
-				_Value read(const char* key) { return read(key, strlen(key)); }
-				_Value read(const void* key, unsigned int key_length) {
-					return _index.read(page_head + key_to_index(key, key_length));
 				}
 			};
 		}
