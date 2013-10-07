@@ -1,7 +1,7 @@
 #ifndef __github_com_myun2__nitro__db__string_index_page_HPP__
 #define __github_com_myun2__nitro__db__string_index_page_HPP__
 
-#include <string.h>
+#include "myun2/nitro3/db/string_to_hash.hpp"
 
 namespace myun2
 {
@@ -9,21 +9,16 @@ namespace myun2
 	{
 		namespace db
 		{
-			template <typename _IndexFile, typename _Value, unsigned int _PageBits=8>
+			template <typename _Impl>
 			class string_index_page
 			{
 			public:
 				typedef unsigned int index_t;
 				typedef unsigned int hash_t;
 			private:
-				_IndexFile& _index;
-				unsigned int page_head;
-
-				hash_t key_to_index(const void* key, unsigned int key_length) {
-					return *key;
-				}
+				_Impl& file;
 			public:
-				string_index_page(_IndexFile& index, unsigned int page_head_in=0) : _index(index), page_head(page_head_in) {}
+				string_index_page(_Impl& _file) : file(_file) {}
 
 				///////////////////////
 
