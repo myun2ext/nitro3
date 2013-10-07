@@ -13,7 +13,7 @@ namespace myun2
 			class string_index_page
 			{
 			public:
-				typedef unsigned int index_t;
+				typedef _Impl::index_t index_t;
 				typedef unsigned int hash_t;
 			private:
 				_Impl& file;
@@ -22,9 +22,10 @@ namespace myun2
 
 				///////////////////////
 
-				index_t write(const char* key, const _Value& v) { return write(key, strlen(key), v); }
-				index_t write(const void* key, unsigned int key_length, const _Value& v) {
-					return _index.write(page_head + key_to_index(key, key_length), v);
+				hash_t key_to_index(const char* s){ return string_to_index(s); }
+
+				index_t add(const char* key) {
+					file.write(key_to_index(key));
 				}
 
 				_Value read(const char* key) { return read(key, strlen(key)); }
