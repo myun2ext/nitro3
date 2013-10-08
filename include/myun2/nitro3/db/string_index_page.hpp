@@ -15,30 +15,23 @@ namespace myun2
 			{
 			public:
 				typedef typename _Impl::index_t index_t;
-				typedef unsigned int hash_t;
 			private:
 				_Impl& file;
 
-				hash_t page[_PageLength * _KeyEntries];
+				index_t page[_PageLength * _KeyEntries];
 				void read_page() {
 					file._read(0, page, sizeof(page));
 				}
 				void write_page() {
 					file._write(0, page, sizeof(page));
 				}
-
-				void init_on_mem_page()
-				{
-					memset(page, 0, sizeof(page));
+				index_t key_to_index(const char* s) {
+					return string_to_hash(s) % _PageLength;
 				}
 			public:
 				string_index_page(_Impl& _file) : file(_file) {
-					init_on_mem_page();
+					read_page();
 				}
-
-				///////////////////////
-
-				hash_t key_to_index(const char* s){ return string_to_hash(s) % _PageLength; }
 
 				index_t add(const char* key) {
 					file.write(key_to_index(key));
