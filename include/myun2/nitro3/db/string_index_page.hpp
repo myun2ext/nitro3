@@ -2,6 +2,7 @@
 #define __github_com_myun2__nitro__db__string_index_page_HPP__
 
 #include "myun2/nitro3/db/string_to_hash.hpp"
+#include <memory.h>
 
 namespace myun2
 {
@@ -18,15 +19,22 @@ namespace myun2
 			private:
 				_Impl& file;
 
-				unsigned int pages[_PageLength];
+				hash_t page[_PageLength * _KeyEntries];
 				void read_page() {
-					file._read(0, pages, sizeof(pages));
+					file._read(0, page, sizeof(page));
 				}
 				void write_page() {
-					file._write(0, pages, sizeof(pages));
+					file._write(0, page, sizeof(page));
+				}
+
+				void init_on_mem_page()
+				{
+					memset(page, 0, sizeof(page));
 				}
 			public:
-				string_index_page(_Impl& _file) : file(_file) {}
+				string_index_page(_Impl& _file) : file(_file) {
+					init_on_mem_page();
+				}
 
 				///////////////////////
 
