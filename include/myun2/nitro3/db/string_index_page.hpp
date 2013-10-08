@@ -18,7 +18,7 @@ namespace myun2
 			private:
 				_Impl& file;
 
-				unsigned int pages[_PageSize];
+				unsigned int pages[_PageLength];
 				void read_page() {
 					file._read(0, pages, sizeof(pages));
 				}
@@ -30,7 +30,7 @@ namespace myun2
 
 				///////////////////////
 
-				hash_t key_to_index(const char* s){ return string_to_hash(s); }
+				hash_t key_to_index(const char* s){ return string_to_hash(s) % _PageLength; }
 
 				index_t add(const char* key) {
 					file.write(key_to_index(key));
