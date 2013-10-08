@@ -28,13 +28,9 @@ namespace myun2
 					read_page();
 				}
 
-				///////////////////////
-
-				hash_t key_to_index(const char* s){ return string_to_hash(s); }
-
-				index_t add(const char* key) {
-					file.write(key_to_index(key));
-				}
+			//	index_t add(const char* key) {
+			//		file.write(key_to_index(key));
+			//	}
 			};
 		}
 	}
