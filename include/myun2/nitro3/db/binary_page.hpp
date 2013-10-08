@@ -1,5 +1,5 @@
-#ifndef __github_com_myun2__nitro__db__binary_HPP__
-#define __github_com_myun2__nitro__db__binary_HPP__
+#ifndef __github_com_myun2__nitro__db__binary_page_HPP__
+#define __github_com_myun2__nitro__db__binary_page_HPP__
 
 namespace myun2
 {
@@ -7,12 +7,12 @@ namespace myun2
 	{
 		namespace db
 		{
-			template <typename _Impl, unsigned int _PageSize=256>
-			class binary
+			template <typename _Impl, unsigned int _PageSize=256, typename _KeyType=unsigned char>
+			class binary_page
 			{
 			public:
 				typedef typename _Impl::index_t index_t;
-				typedef unsigned int hash_t;
+				typedef _KeyType key_t;
 			private:
 				_Impl& file;
 
@@ -24,7 +24,9 @@ namespace myun2
 					file._write(0, pages, sizeof(pages));
 				}
 			public:
-				string_index_page(_Impl& _file) : file(_file) {}
+				binary_page(_Impl& _file) : file(_file) {
+					read_page();
+				}
 
 				///////////////////////
 
@@ -38,4 +40,4 @@ namespace myun2
 	}
 }
 
-#endif//__github_com_myun2__nitro__db__binary_HPP__
+#endif//__github_com_myun2__nitro__db__binary_page_HPP__
