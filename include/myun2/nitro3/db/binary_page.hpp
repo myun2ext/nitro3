@@ -17,13 +17,16 @@ namespace myun2
 				typedef _KeyType key_t;
 			private:
 				static const size_t head = 0;
+				static const size_t null_pos = 0;
 
 				_Impl& file;
 				struct Entry
 				{
 					index_t i;
 					key_t key;
-					Entry(index_t i_, key_t key_) : i(i_), key(key_) {}
+					index_t prev, next;
+
+					Entry(index_t i_, key_t key_) : i(i_), key(key_), prev(null_pos), next(null_pos) {}
 				};
 
 				Entry page[_PageSize];
@@ -35,10 +38,17 @@ namespace myun2
 				}
 
 				Entry read(pos_t pos) { return page[pos]; }
-				void write(pos_t pos, const Entry &Entry) { page[pos] = entry; }
+				void write(pos_t pos, const Entry &Entry) {page[pos] = entry; }
+				void flush() { write_page() }
 
 				index_t find_entry(pos_t pos, const _KeyType &key) {
-					read(pos);
+					Entry e = read(pos);
+					if ( e.key == key )
+						return pos;
+					if ( key < e.key )
+						return find_entry(e.prev, key);
+					else
+						return find_entry(e.next, key);
 				}
 			public:
 				binary_page(_Impl& _file) : file(_file) {
