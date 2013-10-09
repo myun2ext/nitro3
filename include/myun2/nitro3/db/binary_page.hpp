@@ -19,6 +19,7 @@ namespace myun2
 				typedef _KeyType key_t;
 			private:
 				static const size_t head = sizeof(_IndexType);
+				static const _KeyType null_key = 0;
 				static const size_t null_idx = 0;
 
 				_Impl& file;
@@ -28,8 +29,12 @@ namespace myun2
 					index_t prev, next;
 					key_t key;
 
+					//Entry() : i(null_idx), key(null_key), prev(null_idx), next(null_idx) {}
 					Entry(){}
 					Entry(index_t i_, key_t key_) : i(i_), key(key_), prev(null_idx), next(null_idx) {}
+
+					bool is_none() const { return i == null_idx; }
+					bool is_key_none() const { return key == null_key; }
 				};
 
 				Entry page[_PageSize];
@@ -42,18 +47,20 @@ namespace myun2
 				}
 
 				const Entry& read(pos_t pos) const { return page[pos]; }
+				Entry& read(pos_t pos) { return page[pos]; }
 				void write(pos_t pos, const Entry &entry) { page[pos] = entry; }
-
-				index_t find_entry(pos_t pos, const _KeyType &key) {
-					const Entry& e = read(pos);
+public:
+				//index_t find_entry(pos_t pos, const _KeyType &key) {
+				const Entry& find_entry(const _KeyType &key, pos_t pos=head) {
+					Entry& e = read(pos);
 					if ( e.i == null_idx )
-						return null_idx;
+						return e;
 					if ( e.key == key )
-						return pos;
+						return e;
 					if ( key < e.key )
-						return find_entry(e.prev, key);
+						return find_entry(key, e.prev);
 					else
-						return find_entry(e.next, key);
+						return find_entry(key, e.next);
 				}
 			public:
 				binary_page(_Impl& _file) : file(_file) {
@@ -61,11 +68,16 @@ namespace myun2
 				}
 
 				index_t find(const _KeyType &key) {
-					return find_sub(head, key);
+					return find_entry(key).i;
 				}
 
 				index_t append(const _KeyType &key) {
-					//////Entry e(
+					Entry& e = find_entry(key);
+					if ( e.is_none() ) {
+						e.key = key;
+						save();
+						
+					}
 					//file.write(key_to_index(key));
 				}
 
