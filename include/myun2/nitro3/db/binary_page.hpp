@@ -7,16 +7,22 @@ namespace myun2
 	{
 		namespace db
 		{
-			template <typename _Impl, unsigned int _PageSize=256, typename _KeyType=unsigned char>
+			template <typename _Impl, unsigned int _PageSize=256, typename _KeyType=unsigned int, typename _IndexType=unsigned char>
 			class binary_page
 			{
 			public:
-				typedef typename _Impl::index_t index_t;
+				//typedef typename _Impl::index_t index_t;
+				typedef _IndexType index_t;
 				typedef _KeyType key_t;
 			private:
 				_Impl& file;
+				struct Entry
+				{
+					index_t i;
+					key_t key;
+				};
 
-				unsigned int pages[_PageSize];
+				Entry pages[_PageSize];
 				void read_page() {
 					file._read(0, pages, sizeof(pages));
 				}
@@ -28,9 +34,9 @@ namespace myun2
 					read_page();
 				}
 
-			//	index_t add(const char* key) {
-			//		file.write(key_to_index(key));
-			//	}
+				index_t append(const _KeyType &key) {
+					file.write(key_to_index(key));
+				}
 			};
 		}
 	}
