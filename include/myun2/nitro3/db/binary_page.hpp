@@ -18,8 +18,8 @@ namespace myun2
 				typedef _IndexType index_t;
 				typedef _KeyType key_t;
 			private:
-				static const size_t head = 0;
-				static const size_t null_pos = 0;
+				static const size_t head = sizeof(_IndexType);
+				static const size_t null_idx = 0;
 
 				_Impl& file;
 				struct Entry
@@ -28,7 +28,7 @@ namespace myun2
 					key_t key;
 					index_t prev, next;
 
-					Entry(index_t i_, key_t key_) : i(i_), key(key_), prev(null_pos), next(null_pos) {}
+					Entry(index_t i_, key_t key_) : i(i_), key(key_), prev(null_idx), next(null_idx) {}
 				};
 
 				Entry page[_PageSize];
@@ -41,11 +41,13 @@ namespace myun2
 				}
 
 				Entry read(pos_t pos) { return page[pos]; }
-				void write(pos_t pos, const Entry &Entry) {page[pos] = entry; }
+				void write(pos_t pos, const Entry &Entry) { page[pos] = entry; }
 				void flush() { write_page() }
 
 				index_t find_entry(pos_t pos, const _KeyType &key) {
 					Entry e = read(pos);
+					if ( e.i == null_idx )
+						return null_idx;
 					if ( e.key == key )
 						return pos;
 					if ( key < e.key )
