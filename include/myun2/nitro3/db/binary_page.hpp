@@ -12,9 +12,12 @@ namespace myun2
 			{
 			public:
 				//typedef typename _Impl::index_t index_t;
+				typedef size_t pos_t;
 				typedef _IndexType index_t;
 				typedef _KeyType key_t;
 			private:
+				static const size_t head = 0;
+
 				_Impl& file;
 				struct Entry
 				{
@@ -30,13 +33,20 @@ namespace myun2
 				void write_page() {
 					file._write(0, pages, sizeof(pages));
 				}
+
+				index_t find_sub(pos_t pos, const _KeyType &key) {
+				}
 			public:
 				binary_page(_Impl& _file) : file(_file) {
 					read_page();
 				}
 
+				index_t find(const _KeyType &key) {
+					return find_sub(head, key);
+				}
+
 				index_t append(const _KeyType &key) {
-					//Entry e(
+					//////Entry e(
 					file.write(key_to_index(key));
 				}
 			};
