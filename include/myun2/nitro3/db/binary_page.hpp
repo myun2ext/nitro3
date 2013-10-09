@@ -41,8 +41,8 @@ namespace myun2
 				}
 
 				Entry read(pos_t pos) { return page[pos]; }
-				void write(pos_t pos, const Entry &Entry) { page[pos] = entry; }
-				void flush() { write_page() }
+				void write(pos_t pos, const Entry &entry) { page[pos] = entry; }
+				void flush() { write_page(); }
 
 				index_t find_entry(pos_t pos, const _KeyType &key) {
 					Entry e = read(pos);
