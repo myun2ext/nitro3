@@ -25,8 +25,8 @@ namespace myun2
 				struct Entry
 				{
 					index_t i;
-					key_t key;
 					index_t prev, next;
+					key_t key;
 
 					Entry(){}
 					Entry(index_t i_, key_t key_) : i(i_), key(key_), prev(null_idx), next(null_idx) {}
@@ -43,7 +43,6 @@ namespace myun2
 
 				const Entry& read(pos_t pos) const { return page[pos]; }
 				void write(pos_t pos, const Entry &entry) { page[pos] = entry; }
-				void flush() { write_page(); }
 
 				index_t find_entry(pos_t pos, const _KeyType &key) {
 					const Entry& e = read(pos);
@@ -69,6 +68,9 @@ namespace myun2
 					//////Entry e(
 					//file.write(key_to_index(key));
 				}
+
+				void save() { write_page(); }
+				void flush() { write_page(); }
 			};
 		}
 	}

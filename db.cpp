@@ -10,9 +10,11 @@ int main()
 {
 	file_pool index_file = file_pool("index.db");
 	file_pool binary_file = file_pool("binary.db");
-	
+
 	string_index_page<file_pool> index(index_file);
-	binary_page<file_pool> bin(binary_file);
+	binary_page<file_pool> binary(binary_file);
+
+	binary.save();
 
 	return 0;
 }
