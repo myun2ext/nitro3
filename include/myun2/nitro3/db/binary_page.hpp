@@ -1,6 +1,8 @@
 #ifndef __github_com_myun2__nitro__db__binary_page_HPP__
 #define __github_com_myun2__nitro__db__binary_page_HPP__
 
+#include <memory.h>
+
 namespace myun2
 {
 	namespace nitro3
@@ -31,6 +33,7 @@ namespace myun2
 
 				Entry page[_PageSize];
 				void read_page() {
+					memset(page, 0, sizeof(page));
 					file._read(0, page, sizeof(page));
 				}
 				void write_page() {
