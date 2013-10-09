@@ -36,6 +36,12 @@ namespace myun2
 					bool is_none() const { return i == null_idx; }
 					bool is_key_none() const { return key == null_key; }
 				};
+				struct EntryResult
+				{
+					Entry& e;
+					pos_t pos;
+					EntryResult(Entry& e_, pos_t pos) : e(e_), pos(pos_) {}
+				};
 
 				Entry page[_PageSize];
 				void read_page() {
@@ -51,12 +57,12 @@ namespace myun2
 				void write(pos_t pos, const Entry &entry) { page[pos] = entry; }
 public:
 				//index_t find_entry(pos_t pos, const _KeyType &key) {
-				const Entry& find_entry(const _KeyType &key, pos_t pos=head) {
+				EntryResult find_entry(const _KeyType &key, pos_t pos=head) {
 					Entry& e = read(pos);
 					if ( e.i == null_idx )
-						return e;
+						return EntryResult(e, pos);
 					if ( e.key == key )
-						return e;
+						return EntryResult(e, pos);
 					if ( key < e.key )
 						return find_entry(key, e.prev);
 					else
