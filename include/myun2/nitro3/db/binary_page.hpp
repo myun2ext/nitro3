@@ -20,6 +20,7 @@ namespace myun2
 				{
 					index_t i;
 					key_t key;
+					Entry(index_t i_, key_t key_) : i(i_), key(key_) {}
 				};
 
 				Entry pages[_PageSize];
@@ -35,6 +36,7 @@ namespace myun2
 				}
 
 				index_t append(const _KeyType &key) {
+					//Entry e(
 					file.write(key_to_index(key));
 				}
 			};
