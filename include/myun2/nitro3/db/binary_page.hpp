@@ -26,15 +26,19 @@ namespace myun2
 					Entry(index_t i_, key_t key_) : i(i_), key(key_) {}
 				};
 
-				Entry pages[_PageSize];
+				Entry page[_PageSize];
 				void read_page() {
-					file._read(0, pages, sizeof(pages));
+					file._read(0, page, sizeof(page));
 				}
 				void write_page() {
-					file._write(0, pages, sizeof(pages));
+					file._write(0, page, sizeof(page));
 				}
 
-				index_t find_sub(pos_t pos, const _KeyType &key) {
+				Entry read(pos_t pos) { return page[pos]; }
+				void write(pos_t pos, const Entry &Entry) { page[pos] = entry; }
+
+				index_t find_entry(pos_t pos, const _KeyType &key) {
+					read(pos);
 				}
 			public:
 				binary_page(_Impl& _file) : file(_file) {
