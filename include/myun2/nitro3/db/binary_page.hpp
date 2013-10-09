@@ -28,6 +28,7 @@ namespace myun2
 					key_t key;
 					index_t prev, next;
 
+					Entry(){}
 					Entry(index_t i_, key_t key_) : i(i_), key(key_), prev(null_idx), next(null_idx) {}
 				};
 
@@ -40,12 +41,12 @@ namespace myun2
 					file._write(0, page, sizeof(page));
 				}
 
-				Entry read(pos_t pos) { return page[pos]; }
+				const Entry& read(pos_t pos) const { return page[pos]; }
 				void write(pos_t pos, const Entry &entry) { page[pos] = entry; }
 				void flush() { write_page(); }
 
 				index_t find_entry(pos_t pos, const _KeyType &key) {
-					Entry e = read(pos);
+					const Entry& e = read(pos);
 					if ( e.i == null_idx )
 						return null_idx;
 					if ( e.key == key )
@@ -66,7 +67,7 @@ namespace myun2
 
 				index_t append(const _KeyType &key) {
 					//////Entry e(
-					file.write(key_to_index(key));
+					//file.write(key_to_index(key));
 				}
 			};
 		}
