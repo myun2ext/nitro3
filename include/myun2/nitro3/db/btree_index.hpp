@@ -61,12 +61,12 @@ namespace myun2
 				}
 
 				size_t page_pos(unsigned int page_num) const { return page_num * page_size; }
-				page& read_page(page& p, unsigned int page_num) {
-					file._read(page_pos(page_num), &p, sizeof(page));
+				page& read_page(page& p, unsigned int page_idx) {
+					file._read(page_pos(page_idx), &p, sizeof(page));
 					return p;
 				}
-				void write_page() {
-					file._write(page_pos(page_num), &p, sizeof(page));
+				void write_page(page& p, unsigned int page_idx) {
+					file._write(page_pos(page_idx), &p, sizeof(page));
 					return p;
 				}
 				bool is_new_file() const { return file.size() == 0; }
