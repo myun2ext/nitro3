@@ -40,7 +40,7 @@ namespace myun2
 				{
 					Entry& e;
 					pos_t pos;
-					EntryResult(Entry& e_, pos_t pos) : e(e_), pos(pos_) {}
+					EntryResult(Entry& e_, pos_t pos_) : e(e_), pos(pos_) {}
 				};
 
 				Entry page[_PageSize];
