@@ -14,7 +14,8 @@ int main()
 	string_index_page<file_pool> index(index_file);
 	binary_page<file_pool> binary(binary_file);
 
-	binary.save();
+	printf("%d\n", binary.find_entry(1).i);
+	//binary.save();
 
 	return 0;
 }
