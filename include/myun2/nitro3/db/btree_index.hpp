@@ -9,7 +9,7 @@ namespace myun2
 	{
 		namespace db
 		{
-			template <typename _Impl, typename _ValueType=unsigned int, typename _KeyType=unsigned int, unsigned int _PageEntries=256>
+			template <typename _Impl, typename _ValueType=unsigned int, typename _KeyType=unsigned int, unsigned int _PageEntries=1024>
 			class btree_index
 			{
 			public:
@@ -55,6 +55,11 @@ namespace myun2
 				void init_page(page& p) {
 					memset(&p, 0, sizeof(page));
 				}
+				page create_page() {
+					page p;
+					init_page(p);
+					return p;
+				}
 				template <typename T>
 				void add(page& p, const T& v) {
 					
@@ -65,14 +70,22 @@ namespace myun2
 					file._read(page_pos(page_idx), &p, sizeof(page));
 					return p;
 				}
-				void write_page(page& p, unsigned int page_idx) {
+				page& write_page(page& p, unsigned int page_idx) {
 					file._write(page_pos(page_idx), &p, sizeof(page));
 					return p;
 				}
-				bool is_new_file() const { return file.size() == 0; }
+				bool is_file_none() const { return file.size() == 0; }
+				void init() {
+					if ( is_file_none() )
+						create_first_page();
+				}
+				void create_first_page() {
+					page p = create_page();
+					write_page(p, 0);
+				}
 
 			public:
-				btree_index(_Impl& _file) : file(_file) {}
+				btree_index(_Impl& _file) : file(_file) { init(); }
 
 				void append(const key_t& k) {
 					

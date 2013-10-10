@@ -7,8 +7,10 @@ using namespace myun2::nitro3::db;
 
 int main()
 {
-	file_pool file = file_pool("tree.idx");
+	file_pool file = file_pool("btree.idx");
 	btree_index<file_pool> btree(file);
+
+	//printf("%d\n", btree.find_first_empty() );
 
 	return 0;
 }
