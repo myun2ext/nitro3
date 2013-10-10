@@ -21,32 +21,32 @@ namespace myun2
 				struct page
 				{
 					//typedef typename _Impl::index_t entry;
-					struct Entry
+					struct entry
 					{
 						key_t key;
 						value_t value;
 					};
-					//typedef typename _Impl::index_t Entry;
+					//typedef typename _Impl::index_t entry;
 					typedef size_t index_t;
 					static const unsigned int max = _PageEntries;
 					static const unsigned int entry_max = _PageEntries;
 					static const index_t null_idx = 0;
 
-					Entry entries[entry_max];
+					entry entries[entry_max];
 
-					Entry& at(const index_t& i) { return entries[i]; }
-					const Entry& at(const index_t& i) const { return entries[i]; }
+					entry& at(const index_t& i) { return entries[i]; }
+					const entry& at(const index_t& i) const { return entries[i]; }
 
-					Entry& find_first() {}
-					Entry& find_first_empty() {
+					entry& find_first() {}
+					entry& find_first_empty() {
 						for(size_t i=0; i<max; i++) {
 							if ( at(i) == null_idx )
 								return at(i);
 						}
 					}
 
-					Entry& add(page& p, const value_t& v) {
-						Entry& e = find_first_empty();
+					entry& add(const value_t& v) {
+						entry& e = find_first_empty();
 						e.value = v;
 						return e;
 					}
