@@ -20,6 +20,9 @@ namespace myun2
 				{
 					index_t entries[_PageEntries];
 				};
+				void init_page(page& p) {
+					memset(&p, 0, sizeof(page));
+				}
 			public:
 				btree_index(_Impl& _file) : file(_file) {}
 			};
