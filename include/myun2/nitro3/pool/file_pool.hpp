@@ -112,6 +112,8 @@ namespace myun2
 				}
 
 				//template <typename T> ::std::vector<T> read_vector(index_t i) {}
+
+				long size(){ return ftell(fp); }
 			};
 		}
 	}

@@ -44,7 +44,6 @@ namespace myun2
 								return at(i);
 						}
 					}
-
 					entry& add(const value_t& v) {
 						entry& e = find_first_empty();
 						e.value = v;
@@ -70,6 +69,7 @@ namespace myun2
 					file._write(page_pos(page_num), &p, sizeof(page));
 					return p;
 				}
+				bool is_new_file() const { return file.size() == 0; }
 
 			public:
 				btree_index(_Impl& _file) : file(_file) {}
