@@ -20,21 +20,9 @@ namespace myun2
 				_Impl& file;
 				struct page
 				{
-					//typedef typename _Algorithm::header header;
-					//typedef typename _Algorithm::entry entry;
+					typedef typename _Algorithm::header header;
+					typedef typename _Algorithm::entry entry;
 
-					struct header
-					{
-						unsigned int entry_start;
-						unsigned int entry_end;
-					};
-
-					//typedef typename _Impl::index_t entry;
-					struct entry
-					{
-						key_t key;
-						value_t value;
-					};
 					typedef size_t index_t;
 					static const unsigned int max = _PageEntries;
 					static const unsigned int entry_max = _PageEntries - (sizeof(header) / sizeof(entry));
