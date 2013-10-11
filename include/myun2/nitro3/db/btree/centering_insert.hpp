@@ -29,6 +29,33 @@ namespace myun2
 						key_t key;
 						value_t value;
 					};
+
+				private:
+					template <typename _Page>
+					struct page_virtual {
+						static const unsigned int entry_max = _Page::entry_max;
+
+						_Page& page;
+						header& head;
+						entry& entries[];
+					};
+
+					template <typename _Page>
+					void check_and_initial_page(_Page& p) {
+						header& head = p.head;
+						if ( head.entry_start == 0 )
+						{
+							head.entry_start = _Page::entry_max / 2;
+							head.entry_end = _Page::entry_max / 2;
+						}
+					}
+				public:
+					template <typename _Page>
+					entry& add(_Page& p, const value_t& v) {
+						entry& e = find_first_empty();
+						e.value = v;
+						return e;
+					}
 				};
 			}
 		}
