@@ -31,10 +31,17 @@ namespace myun2
 				entry& at(size_t i) {
 					return entries[i];
 				}
+				const entry& at(size_t i) const {
+					return entries[i];
+				}
 			public:
 				hash_table(_Impl& _file) : file(_file) { reload(); }
 
 				entry& operator[] (const key_t& hash) {
+					size_t chopped = chop(hash);
+					return at(chopped);
+				}
+				const entry& operator[] (const key_t& hash) const {
 					size_t chopped = chop(hash);
 					return at(chopped);
 				}
