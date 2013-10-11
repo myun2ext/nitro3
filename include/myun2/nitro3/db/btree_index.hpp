@@ -9,6 +9,12 @@ namespace myun2
 	{
 		namespace db
 		{
+			template <typename Entry>
+			struct duplicate_key_exception {
+				Entry& e;
+				duplicate_key_exception(Entry& e_) : e(e_) {}
+			};
+
 			template <typename _Impl, typename _Algorithm, unsigned int _PageEntries=1024>
 			class btree_index
 			{

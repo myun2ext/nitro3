@@ -62,8 +62,12 @@ namespace myun2
 				public:
 					template <typename _Page>
 					//entry& add(_Page& p, const value_t& v) {
-					void add(_Page& p, const value_t& v) {
-						if first_append(p, v) return ;
+					entry& add(_Page& p, const key_t& key, const value_t& v) {
+						if first_append(p, v) return center(p);
+
+						entry& pv = center(p);
+						if ( pv.key = key )
+							throw duplicate_key_exception(pv);
 
 						entry& e = find_first_empty();
 						e.value = v;
