@@ -9,7 +9,7 @@ namespace myun2
 	{
 		namespace db
 		{
-			template <typename _Impl, typename _HashKey=unsigned int, typename _HashValue=unsigned int, unsigned int _HashTableLength=256>
+			template <typename _Impl, typename _HashKey=unsigned int, typename _HashValue=unsigned int, unsigned int _HashTableLength=2048>
 			class hash_table
 			{
 			public:
@@ -25,6 +25,19 @@ namespace myun2
 					value_t v;
 				};
 				entry entries[_HashTableLength];
+				size_t chop(const key_t& hash) const {
+					return hash % _HashTableLength;
+				}
+				entry& at(size_t i) {
+					return entries[i];
+				}
+			public:
+				hash_table(_Impl& _file) : file(_file) { reload(); }
+
+				entry& operator[] (const key_t& hash) {
+					size_t chopped = chop(hash);
+					return at(chopped);
+				}
 
 				void reload() {
 					file._read(0, entries, sizeof(entries));
@@ -32,11 +45,6 @@ namespace myun2
 				void flush() {
 					file._write(0, entries, sizeof(entries));
 				}
-				unsigned int cut_hash(const key_t& hash) const {
-					return hash % _HashTableLength;
-				}
-			public:
-				hash_table(_Impl& _file) : file(_file) { reload(); }
 			};
 		}
 	}
