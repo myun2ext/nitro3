@@ -8,10 +8,11 @@ using namespace myun2::nitro3::db;
 
 int main()
 {
-	file_pool file = file_pool("btree.idx");
-	hash_table<file_pool> btree(file);
+	file_pool file = file_pool("hash.db");
+	hash_table<file_pool> h(file);
 
-	//printf("%d\n", btree.find_first_empty() );
+	h[200] = 333;
+	h.save();
 
 	return 0;
 }

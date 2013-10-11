@@ -22,7 +22,7 @@ namespace myun2
 				struct entry
 				{
 					key_t key;
-					value_t v;
+					value_t value;
 				};
 				entry entries[_HashTableLength];
 				size_t chop(const key_t& hash) const {
@@ -37,21 +37,23 @@ namespace myun2
 			public:
 				hash_table(_Impl& _file) : file(_file) { reload(); }
 
-				entry& operator[] (const key_t& hash) {
+				value_t& operator[] (const key_t& hash) {
 					size_t chopped = chop(hash);
-					return at(chopped);
+					return at(chopped).value;
 				}
-				const entry& operator[] (const key_t& hash) const {
+				const value_t& operator[] (const key_t& hash) const {
 					size_t chopped = chop(hash);
-					return at(chopped);
+					return at(chopped).value;
 				}
 
 				void reload() {
+					memset(entries, 0, sizeof(entries));
 					file._read(0, entries, sizeof(entries));
 				}
 				void flush() {
 					file._write(0, entries, sizeof(entries));
 				}
+				void save(){ flush(); }
 			};
 		}
 	}
