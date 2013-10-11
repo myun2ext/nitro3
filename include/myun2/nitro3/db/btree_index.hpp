@@ -20,6 +20,12 @@ namespace myun2
 				_Impl& file;
 				struct page
 				{
+					struct header
+					{
+						unsigned int entry_start;
+						unsigned int entry_end;
+					};
+
 					//typedef typename _Impl::index_t entry;
 					struct entry
 					{
@@ -29,9 +35,10 @@ namespace myun2
 					//typedef typename _Impl::index_t entry;
 					typedef size_t index_t;
 					static const unsigned int max = _PageEntries;
-					static const unsigned int entry_max = _PageEntries;
+					static const unsigned int entry_max = _PageEntries - (sizeof(header) / sizeof(entry));
 					static const index_t null_idx = 0;
 
+					header head;
 					entry entries[entry_max];
 
 					entry& at(const index_t& i) { return entries[i]; }
