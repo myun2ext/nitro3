@@ -41,17 +41,22 @@ namespace myun2
 					};
 
 					template <typename _Page>
-					void check_and_initial_page(_Page& p) {
+					bool first_append(_Page& p, const value_t& v) {
 						header& head = p.head;
 						if ( head.entry_start == 0 )
 						{
 							head.entry_start = _Page::entry_max / 2;
-							head.entry_end = _Page::entry_max / 2;
+							head.entry_end = head.entry_start;
+							p.at(head.entry_start) = v;
+							return true;
 						}
+						return false;
 					}
 				public:
 					template <typename _Page>
 					entry& add(_Page& p, const value_t& v) {
+						first_append(p, v);
+
 						entry& e = find_first_empty();
 						e.value = v;
 						return e;
