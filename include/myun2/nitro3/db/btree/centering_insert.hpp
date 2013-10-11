@@ -31,21 +31,28 @@ namespace myun2
 					};
 
 				private:
+					typedef unsigned int entry_index_t, entry_idx_t;
+					static const entry_index_t null_entry_index = 0;
+
 					template <typename _Page>
 					struct page_virtual {
-						static const unsigned int entry_max = _Page::entry_max;
+						static const entry_index_t entry_max = _Page::entry_max;
 
 						_Page& page;
 						header& head;
 						entry& entries[];
 					};
 
+					entry_index_t center_index() const { _Page::entry_max / 2; }
+					template <typename _Page>
+					entry& center(_Page& p) { return p.at(center_index()); }
+
 					template <typename _Page>
 					bool first_append(_Page& p, const value_t& v) {
 						header& head = p.head;
-						if ( head.entry_start == 0 )
+						if ( head.entry_start == null_entry_index )
 						{
-							head.entry_start = _Page::entry_max / 2;
+							head.entry_start = center_index();
 							head.entry_end = head.entry_start;
 							p.at(head.entry_start) = v;
 							return true;
@@ -54,8 +61,9 @@ namespace myun2
 					}
 				public:
 					template <typename _Page>
-					entry& add(_Page& p, const value_t& v) {
-						first_append(p, v);
+					//entry& add(_Page& p, const value_t& v) {
+					void add(_Page& p, const value_t& v) {
+						if first_append(p, v) return ;
 
 						entry& e = find_first_empty();
 						e.value = v;
