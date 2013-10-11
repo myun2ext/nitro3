@@ -9,13 +9,13 @@ namespace myun2
 	{
 		namespace db
 		{
-			template <typename _Impl, typename _Algorithm, typename _ValueType=unsigned int, typename _KeyType=unsigned int, unsigned int _PageEntries=1024>
+			template <typename _Impl, typename _Algorithm, unsigned int _PageEntries=1024>
 			class btree_index
 			{
 			public:
 				typedef typename _Impl::index_t index_t;
-				typedef _ValueType value_t;
-				typedef _KeyType key_t;
+				typedef typename _Algorithm::key_t key_t;
+				typedef typename _Algorithm::value_t value_t;
 			private:
 				_Impl& file;
 				struct page

@@ -9,11 +9,15 @@ namespace myun2
 	{
 		namespace db
 		{
-			namespace btree_
+			namespace btree_alg
 			{
+				template <typename _KeyType=unsigned int, typename _ValueType=unsigned int>
 				class centering_insert
 				{
 				public:
+					typedef _KeyType key_t;
+					typedef _ValueType value_t;
+
 					struct header
 					{
 						unsigned int entry_start;
