@@ -9,7 +9,7 @@ namespace myun2
 	{
 		namespace db
 		{
-			template <typename _Impl, typename _ValueType=unsigned int, typename _KeyType=unsigned int, unsigned int _PageEntries=1024>
+			template <typename _Impl, typename _Algorithm, typename _ValueType=unsigned int, typename _KeyType=unsigned int, unsigned int _PageEntries=1024>
 			class btree_index
 			{
 			public:
@@ -20,6 +20,9 @@ namespace myun2
 				_Impl& file;
 				struct page
 				{
+					//typedef typename _Algorithm::header header;
+					//typedef typename _Algorithm::entry entry;
+
 					struct header
 					{
 						unsigned int entry_start;
@@ -32,7 +35,6 @@ namespace myun2
 						key_t key;
 						value_t value;
 					};
-					//typedef typename _Impl::index_t entry;
 					typedef size_t index_t;
 					static const unsigned int max = _PageEntries;
 					static const unsigned int entry_max = _PageEntries - (sizeof(header) / sizeof(entry));
