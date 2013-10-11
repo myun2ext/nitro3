@@ -1,7 +1,6 @@
-#ifndef __github_com_myun2__nitro__db__hash_index_HPP__
-#define __github_com_myun2__nitro__db__hash_index_HPP__
+#ifndef __github_com_myun2__nitro__db__hash_table_HPP__
+#define __github_com_myun2__nitro__db__hash_table_HPP__
 
-#include "myun2/nitro3/db/string_to_hash.hpp"
 #include <memory.h>
 
 namespace myun2
@@ -11,7 +10,7 @@ namespace myun2
 		namespace db
 		{
 			template <typename _Impl, unsigned int _HashTableLength=256>
-			class hash_index
+			class hash_table
 			{
 			public:
 				typedef typename _Impl::index_t index_t;
@@ -41,4 +40,4 @@ namespace myun2
 	}
 }
 
-#endif//__github_com_myun2__nitro__db__hash_index_HPP__
+#endif//__github_com_myun2__nitro__db__hash_table_HPP__
