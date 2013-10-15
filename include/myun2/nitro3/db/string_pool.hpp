@@ -19,11 +19,11 @@ namespace myun2
 				_Impl& file;
 
 				void write_length(index_t i, length_t length) {
-					write(i, length, sizeof(length_t));
+					update(i, &length, sizeof(length_t));
 				}
 				length_t read_length(index_t i) {
 					length_t len = 0;
-					read(i, len, sizeof(length_t));
+					read(i, &len, sizeof(length_t));
 					return len;
 				}
 			public:
@@ -34,7 +34,13 @@ namespace myun2
 					file._write(i, p, length);
 					return i;
 				}
-				index_t add(const char* s) { return add(s, strlen(s)); }
+				index_t add(const char* s) {
+					size_t i = file.size();
+					size_t len = strlen(s);
+					write_length(i, len);
+					add(s, len);
+					return i;
+				}
 				template <typename T> index_t add(const T& v) { return add(&v, sizeof(v)); }
 
 				////////////
@@ -53,7 +59,7 @@ namespace myun2
 				}
 
 				::std::string read_s(index_t i) {
-					length_t len = read_length();
+					length_t len = read_length(i);
 					::std::string s(len, 0);
 					read(i + sizeof(length_t), (char*)s.data(), len);
 					return s;

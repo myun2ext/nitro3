@@ -8,7 +8,10 @@ using namespace myun2::nitro3::db;
 int main()
 {
 	file_pool f = file_pool("pool.dat");
-	string_pool<file_pool> h(f);
+	string_pool<file_pool> pool(f);
+
+	int a = pool.add("aaa");
+	printf("%s\n", pool.read_s(a).c_str());
 
 	return 0;
 }
