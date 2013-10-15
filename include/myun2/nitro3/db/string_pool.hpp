@@ -14,65 +14,53 @@ namespace myun2
 			{
 			public:
 				typedef typename _Impl::index_t index_t;
+				typedef size_t length_t;
 			private:
 				_Impl& file;
+
+				void write_length(index_t i, length_t length) {
+					write(i, length, sizeof(length_t));
+				}
+				length_t read_length(index_t i) {
+					length_t len = 0;
+					read(i, len, sizeof(length_t));
+					return len;
+				}
 			public:
 				string_pool(_Impl& _file) : file(_file) {}
 
-				index_t add(const char* s) { return write(s, strlen(s)); }
 				index_t add(const void* p, length_t length) {
-					index_t i = seek_to_tail();
-					fwrite(&length, sizeof(length_t), 1, fp);
-					fwrite(p, length, 1, fp);
+					index_t i = file.size();
+					file._write(i, p, length);
 					return i;
 				}
+				index_t add(const char* s) { return add(s, strlen(s)); }
+				template <typename T> index_t add(const T& v) { return add(&v, sizeof(v)); }
 
-				template <typename T>
-				index_t add(const T& v) {
-					index_t i = seek_to_tail();
-					fwrite(&v, sizeof(v), 1, fp);
+				////////////
+
+				index_t update(index_t i, const void* p, length_t length) {
+					file._write(i, p, length);
 					return i;
 				}
-
-				///////////////////////
-
 				index_t update(index_t i, const char* s) { return update(i, s, strlen(s)); }
-				index_t update(index_t i, const void* p, length_t update_length) {
-					seek_to(i);
-					length_t length;
-					fread(&length, sizeof(length_t), 1, fp);
-					if ( update_length == length ) {
-						fwrite(p, length, 1, fp);
-						return i;
-					}
-					else
-						throw file_pool_update_length_unmatched();
-						//return -1;
+				template <typename T> index_t update(index_t i, const T& v) { return update(i, &v, sizeof(v)); }
+
+				////////////
+
+				void read(index_t i, void* p, length_t length) {
+					file._read(i, p, length);
 				}
 
-				template <typename T>
-				index_t update(index_t i, const T& v) {
-					seek_to(i);
-					fwrite(&v, sizeof(v), 1, fp);
-					return i;
-				}
-
-				///////////////////////
-
-				::std::string read_str(index_t i) {
-					seek_to(i);
-					length_t length;
-					fread(&length, sizeof(length_t), 1, fp);
-					::std::string s(length, 0);
-					fread((char*)s.data(), length, 1, fp);
+				::std::string read_s(index_t i) {
+					length_t len = read_length();
+					::std::string s(len, 0);
+					read(i + sizeof(length_t), (char*)s.data(), len);
 					return s;
 				}
-
-				template <typename T>
-				T read(index_t i) {
-					seek_to(i);
+				template <typename T> T read(index_t i) {
 					T v;
-					fread(&v, sizeof(T), 1, fp);
+					read(i, &v, sizeof(T));
 					return v;
 				}
 			};
