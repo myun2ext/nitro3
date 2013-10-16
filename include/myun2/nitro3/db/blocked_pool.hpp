@@ -18,6 +18,11 @@ namespace myun2
 			private:
 				_Impl& file;
 
+				struct chunck_header
+				{
+					unsigned int used_count;
+				};
+
 				void write_length(index_t i, length_t length) {
 					update(i, &length, sizeof(length_t));
 				}
