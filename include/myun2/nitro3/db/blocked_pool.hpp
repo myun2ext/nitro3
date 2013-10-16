@@ -9,7 +9,7 @@ namespace myun2
 	{
 		namespace db
 		{
-			template <typename _Impl, unsigned int _MinimumEntry=4, unsigned int _EntriesInPage=128>
+			template <typename _Impl, unsigned int _MinimumEntry=8, unsigned int _RecordsInPage=128, bool _IsSquaringUp=true>
 			class blocked_pool
 			{
 			public:
