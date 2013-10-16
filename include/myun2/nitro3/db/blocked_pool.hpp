@@ -9,7 +9,9 @@ namespace myun2
 	{
 		namespace db
 		{
-			template <typename _Impl, unsigned int _MinimumEntry=8, unsigned int _RecordsInPage=128, bool _IsSquaringUp=true>
+			//	_IsSquaringUp = false is Incremental Up
+
+			template <typename _Impl, unsigned int _MinimumEntry=8, unsigned int _RecordsInPage=512, unsigned int _MaxPages=4096, bool _IsSquaringUp=true>
 			class blocked_pool
 			{
 			public:
@@ -18,6 +20,12 @@ namespace myun2
 			private:
 				_Impl& file;
 
+				struct header_block
+				{
+					struct header_entry {
+					};
+					header_entry entries[_MaxPages];
+				};
 				struct chunck_header
 				{
 					unsigned int used_count;
@@ -31,6 +39,67 @@ namespace myun2
 					read(i, &len, sizeof(length_t));
 					return len;
 				}
+			public:
+				blocked_pool(_Impl& _file) : file(_file) {}
+
+				index_t add(const void* p, length_t length) {
+					index_t i = file.size();
+					file._write(i, p, length);
+					return i;
+				}
+				index_t add(const char* s) {
+					size_t i = file.size();
+					size_t len = strlen(s);
+					write_length(i, len);
+					add(s, len);
+					return i;
+				}
+				template <typename T> index_t add(const T& v) { return add(&v, sizeof(v)); }
+
+				////////////
+
+				index_t update(index_t i, const void* p, length_t length) {
+					file._write(i, p, length);
+					return i;
+				}
+				index_t update(index_t i, const char* s) { return update(i, s, strlen(s)); }
+				template <typename T> index_t update(index_t i, const T& v) { return update(i, &v, sizeof(v)); }
+
+				////////////
+
+				void read(index_t i, void* p, length_t length) {
+					file._read(i, p, length);
+				}
+
+				::std::string read_s(index_t i) {
+					length_t len = read_length(i);
+					::std::string s(len, 0);
+					read(i + sizeof(length_t), (char*)s.data(), len);
+					return s;
+				}
+				template <typename T> T read(index_t i) {
+					T v;
+					read(i, &v, sizeof(T));
+					return v;
+				}
+			};
+
+			//////////////////////////////////////
+
+			//	Is Incremental Up
+			template <typename _Impl, unsigned int _MinimumEntry=8, unsigned int _RecordsInPage=128>
+			class blocked_pool<_Impl,_MinimumEntry,_RecordsInPage,false>
+			{
+			public:
+				typedef typename _Impl::index_t index_t;
+				typedef size_t length_t;
+			private:
+				_Impl& file;
+
+				struct chunck_header
+				{
+					unsigned int used_count;
+				};
 			public:
 				blocked_pool(_Impl& _file) : file(_file) {}
 
