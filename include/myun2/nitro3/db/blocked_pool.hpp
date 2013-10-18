@@ -11,6 +11,10 @@ namespace myun2
 		{
 			//	_IsSquaringUp = false is Incremental Up
 
+			struct blocked_pool_base
+			{
+			};
+
 			template <typename _Impl, unsigned int _MinimumEntry=16, unsigned int _RecordsInPage=512, bool _IsSquaringUp=true>
 			class blocked_pool
 			{
@@ -107,7 +111,7 @@ namespace myun2
 			//////////////////////////////////////
 
 			//	Is Incremental Up
-			template <typename _Impl, unsigned int _MinimumEntry=8, unsigned int _RecordsInPage=128>
+			template <typename _Impl, unsigned int _MinimumEntry=1, unsigned int _RecordsInPage=1024>
 			class blocked_pool<_Impl,_MinimumEntry,_RecordsInPage,false>
 			{
 			public:
@@ -124,8 +128,19 @@ namespace myun2
 					unsigned int page_count;
 					unsigned char __reserved[1024 * 16 - sizeof(unsigned int) - 16];
 				};
+				struct chunk_header
+				{
+					unsigned int size;
+					unsigned int used_count;
+					unsigned char __reserved[16 - sizeof(unsigned int) * 2];
+				};
 				header_block header;
 
+				index_t add_to_page(const void* p, length_t length) {
+					index_t i = file.size();
+					file._write(i, p, length);
+					return i;
+				}
 			public:
 				blocked_pool(_Impl& _file) : file(_file) {}
 
