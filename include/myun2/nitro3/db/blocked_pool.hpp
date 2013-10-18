@@ -182,7 +182,9 @@ namespace myun2
 
 				/////////////
 
-				page_header[]& page_headers() { return header.page_headers; }
+				//page_header&[] page_headers() { return header.page_headers; }
+				page_header (&page_headers())[] { return header.page_headers; }
+				//page_header[] page_headers() { return header.page_headers; }
 				page_header& get_ph(page_no_t page_no) { return header.page_headers[page_no]; }
 				const page_header& get_ph(page_no_t page_no) const { return header.page_headers[page_no]; }
 				size_t page_tail_pos(page_no_t page_no) const {
@@ -195,15 +197,16 @@ namespace myun2
 				/*index_t add_point(const page_header& ph) const {
 					return ph.tail_pos*/
 
-				index_t add_to_page(page_no_t page_no, const void* p, length_t length) {
+				/*index_t add_to_page(page_no_t page_no, const void* p, length_t length) {
 					index_t ph = read_page_header(page_no);
 					index_t i = file.size();
 					file._write(i, p, length);
 					return i;
-				}
+				}*/
 
 				page_header& find_or_create_space_has_page_by_size(length_t length) {
-					page_header &phs[] = page_headers();
+					//page_header &phs[] = page_headers();
+					page_header phs[] = page_headers();
 					for(int i=0; i < page_entries_max; i++) {
 						page_header& ph = phs[i];
 					}
