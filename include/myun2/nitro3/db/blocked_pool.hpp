@@ -154,18 +154,23 @@ namespace myun2
 
 				//////////
 
-				void reload() {
+				void reload_header() {
 					file._read(0, &header, sizeof(header));
+				}
+
+				void write_header() {
+					file._write(0, &header, sizeof(header));
 				}
 
 				void init_file() {
 					memset(&header, 0, sizeof(header));
 				}
+
 				void init() {
 					if ( file.size() == 0 )
 						init_file();
 					else
-						reload();
+						reload_header();
 				}
 
 				/////////////
