@@ -111,7 +111,7 @@ namespace myun2
 			//////////////////////////////////////
 
 			//	Is Incremental Up
-			template <typename _Impl, unsigned int _MinimumEntry=1, unsigned int _RecordsInPage=1024>
+			template <typename _Impl, unsigned int _MinimumEntry=1, unsigned int _PageSize=1024 * 16>
 			class blocked_pool<_Impl,_MinimumEntry,_RecordsInPage,false>
 			{
 			public:
