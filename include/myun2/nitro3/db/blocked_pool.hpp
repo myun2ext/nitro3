@@ -18,6 +18,8 @@ namespace myun2
 				_Impl& file;
 			};
 
+			struct not_enough_space_in_pool {};
+
 			template <typename _Impl, unsigned int _MinimumEntry=16, unsigned int _RecordsInPage=512, bool _IsSquaringUp=true>
 			class blocked_pool
 			{
@@ -127,13 +129,17 @@ namespace myun2
 
 				struct page_header // 32B
 				{
-					unsigned int record_size;
+					size_t record_size;
 					unsigned int used_count;
 					//unsigned int tail_pos;
 					unsigned char __reserved[32 - sizeof(unsigned int) * 2];
+
+					void set_record_size(size_t rs) { record_size = rs; }
+					bool is_available() const { return record_size != 0; }
 				};
 
 				static const unsigned int header_size = 1024 * 16; // 16KB
+				static const unsigned int page_entries_max = header_size/sizeof(page_header) - 1024/sizeof(page_header);
 				struct header_block
 				{
 					unsigned int type;
@@ -147,7 +153,7 @@ namespace myun2
 					unsigned char __reserved3[1024 - 32];
 					//	offset: 1024B
 
-					page_header page_headers[header_size/sizeof(page_header) - 1024/sizeof(page_header)];
+					page_header page_headers[page_entries_max];
 					//unsigned char __reserved[header_size - sizeof(unsigned int) - 16];
 					page_header& ph(size_t page_no) { return page_headers[page_no]; }
 				};
@@ -176,6 +182,7 @@ namespace myun2
 
 				/////////////
 
+				page_header[]& page_headers() { return header.page_headers; }
 				page_header& get_ph(page_no_t page_no) { return header.page_headers[page_no]; }
 				const page_header& get_ph(page_no_t page_no) const { return header.page_headers[page_no]; }
 				size_t page_tail_pos(page_no_t page_no) const {
@@ -196,6 +203,11 @@ namespace myun2
 				}
 
 				page_header& find_or_create_space_has_page_by_size(length_t length) {
+					page_header &phs[] = page_headers();
+					for(int i=0; i < page_entries_max; i++) {
+						page_header& ph = phs[i];
+					}
+					throw not_enough_space_in_pool();
 				}
 			public:
 				blocked_pool(_Impl& _file) : file(_file) { init(); }
