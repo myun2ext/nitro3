@@ -11,8 +11,11 @@ namespace myun2
 		{
 			//	_IsSquaringUp = false is Incremental Up
 
+			template <typename _Impl>
 			struct blocked_pool_base
 			{
+			private:
+				_Impl& file;
 			};
 
 			template <typename _Impl, unsigned int _MinimumEntry=16, unsigned int _RecordsInPage=512, bool _IsSquaringUp=true>
@@ -110,17 +113,18 @@ namespace myun2
 
 			//////////////////////////////////////
 
-			//	Is Incremental Up
-			template <typename _Impl, unsigned int _MinimumEntry=1, unsigned int _PageSize=1024 * 16>
+			//	Is Incremental Up (Fixed Size Page)
+			template <typename _Impl, unsigned int _MinimumEntry=1, unsigned int _PageSize=1024 * 8>
 			class blocked_pool<_Impl,_MinimumEntry,_RecordsInPage,false>
 			{
 			public:
 				typedef typename _Impl::index_t index_t;
+				typedef unsigned int page_no_t;
 				typedef size_t length_t;
 			private:
 				_Impl& file;
 
-				struct header_block
+				struct header_block // 16KB
 				{
 					unsigned int type;
 					unsigned char __reserved[16 - sizeof(unsigned int)];
@@ -128,21 +132,51 @@ namespace myun2
 					unsigned int page_count;
 					unsigned char __reserved[1024 * 16 - sizeof(unsigned int) - 16];
 				};
-				struct chunk_header
+				struct page_header
 				{
 					unsigned int size;
 					unsigned int used_count;
-					unsigned char __reserved[16 - sizeof(unsigned int) * 2];
+					unsigned int tail_pos;
+					unsigned char __reserved[32 - sizeof(unsigned int) * 3];
 				};
 				header_block header;
 
-				index_t add_to_page(const void* p, length_t length) {
+				//////////
+
+				void reload() {
+					file._read(0, &header, sizeof(header));
+				}
+
+				void init_file() {
+					memset(&header, 0, sizeof(header));
+				}
+				void init() {
+					if ( file.size() == 0 )
+						init_file();
+					else
+						reload();
+				}
+
+				/////////////
+
+				index_t page_header_pos(page_no_t page_no) const { return _PageSize * page_no + sizeof(header_block); }
+
+				page_header read_page_header(page_no_t page_no) {
+					page_header ph;
+					file._read(page_header_pos(page_no), &ph, sizeof(ph));
+					return ph;
+				}
+				index_t add_point(const page_header& ph) const {
+					return ph.tail_pos
+
+				index_t add_to_page(page_no_t page_no, const void* p, length_t length) {
+					page_header ph = read_page_header(page_no);
 					index_t i = file.size();
 					file._write(i, p, length);
 					return i;
 				}
 			public:
-				blocked_pool(_Impl& _file) : file(_file) {}
+				blocked_pool(_Impl& _file) : file(_file) { init(); }
 
 				index_t add(const void* p, length_t length) {
 					index_t i = file.size();
