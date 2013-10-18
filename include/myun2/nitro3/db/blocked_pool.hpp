@@ -124,20 +124,30 @@ namespace myun2
 			private:
 				_Impl& file;
 
-				struct header_block // 16KB
-				{
-					unsigned int type;
-					unsigned char __reserved[16 - sizeof(unsigned int)];
-
-					unsigned int page_count;
-					unsigned char __reserved[1024 * 16 - sizeof(unsigned int) - 16];
-				};
-				struct page_header
+				struct page_header // 32B
 				{
 					unsigned int size;
 					unsigned int used_count;
 					unsigned int tail_pos;
 					unsigned char __reserved[32 - sizeof(unsigned int) * 3];
+				};
+
+				static const unsigned int header_size = 1024 * 16; // 16KB
+				struct header_block
+				{
+					unsigned int type;
+					unsigned char __reserved[16 - sizeof(unsigned int)];
+					//	offset: 16B
+
+					unsigned int page_count;
+					unsigned char __reserved2[16 - sizeof(unsigned int)];
+					//	offset: 32B
+
+					unsigned char __reserved3[1024 - 32];
+					//	offset: 1024B
+
+					page_header page_headers[header_size/sizeof(page_header) - 1024/sizeof(page_header)];
+					//unsigned char __reserved[header_size - sizeof(unsigned int) - 16];
 				};
 				header_block header;
 
