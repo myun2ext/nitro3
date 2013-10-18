@@ -127,10 +127,10 @@ namespace myun2
 
 				struct page_header // 32B
 				{
-					unsigned int size;
+					unsigned int record_size;
 					unsigned int used_count;
-					unsigned int tail_pos;
-					unsigned char __reserved[32 - sizeof(unsigned int) * 3];
+					//unsigned int tail_pos;
+					unsigned char __reserved[32 - sizeof(unsigned int) * 2];
 				};
 
 				static const unsigned int header_size = 1024 * 16; // 16KB
@@ -149,6 +149,7 @@ namespace myun2
 
 					page_header page_headers[header_size/sizeof(page_header) - 1024/sizeof(page_header)];
 					//unsigned char __reserved[header_size - sizeof(unsigned int) - 16];
+					page_header& ph(size_t page_no) { return page_headers[page_no]; }
 				};
 				header_block header;
 
@@ -175,18 +176,20 @@ namespace myun2
 
 				/////////////
 
-				index_t page_header_pos(page_no_t page_no) const { return _PageSize * page_no + sizeof(header_block); }
-
-				page_header read_page_header(page_no_t page_no) {
-					page_header ph;
-					file._read(page_header_pos(page_no), &ph, sizeof(ph));
-					return ph;
+				page_header& get_ph(page_no_t page_no) { return header.page_headers[page_no]; }
+				const page_header& get_ph(page_no_t page_no) const { return header.page_headers[page_no]; }
+				size_t page_tail_pos(page_no_t page_no) const {
+					page_header ph = get_ph(page_no);
+					return ph.record_size * ph.used_count;
 				}
+				index_t page_pos(page_no_t page_no) const { return _PageSize * page_no + sizeof(header_block); }
+				index_t page_tail(page_no_t page_no) const { return page_pos(page_no) + page_tail_pos(page_no); }
+
 				/*index_t add_point(const page_header& ph) const {
 					return ph.tail_pos*/
 				
 				index_t add_to_page(page_no_t page_no, const void* p, length_t length) {
-					page_header ph = read_page_header(page_no);
+					index_t ph = read_page_header(page_no);
 					index_t i = file.size();
 					file._write(i, p, length);
 					return i;
