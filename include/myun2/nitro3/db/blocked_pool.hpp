@@ -33,7 +33,7 @@ namespace myun2
 					unsigned char __reserved[16 - sizeof(unsigned int)];
 
 					unsigned int page_count;
-					unsigned char __reserved[1024 * 16 - sizeof(unsigned int) - 16];
+					unsigned char __reserved2[1024 * 16 - sizeof(unsigned int) - 16];
 				};
 				struct chunck_header
 				{
@@ -114,8 +114,9 @@ namespace myun2
 			//////////////////////////////////////
 
 			//	Is Incremental Up (Fixed Size Page)
-			template <typename _Impl, unsigned int _MinimumEntry=1, unsigned int _PageSize=1024 * 8>
-			class blocked_pool<_Impl,_MinimumEntry,_RecordsInPage,false>
+			//template <typename _Impl, unsigned int _MinimumEntry=1, unsigned int _PageSize=1024 * 8>
+			template <typename _Impl, unsigned int _MinimumEntry, unsigned int _PageSize>
+			class blocked_pool<_Impl,_MinimumEntry,_PageSize,false>
 			{
 			public:
 				typedef typename _Impl::index_t index_t;
@@ -176,9 +177,9 @@ namespace myun2
 					file._read(page_header_pos(page_no), &ph, sizeof(ph));
 					return ph;
 				}
-				index_t add_point(const page_header& ph) const {
-					return ph.tail_pos
-
+				/*index_t add_point(const page_header& ph) const {
+					return ph.tail_pos*/
+				
 				index_t add_to_page(page_no_t page_no, const void* p, length_t length) {
 					page_header ph = read_page_header(page_no);
 					index_t i = file.size();
@@ -187,7 +188,7 @@ namespace myun2
 				}
 			public:
 				blocked_pool(_Impl& _file) : file(_file) { init(); }
-
+/*
 				index_t add(const void* p, length_t length) {
 					index_t i = file.size();
 					file._write(i, p, length);
@@ -227,7 +228,7 @@ namespace myun2
 					T v;
 					read(i, &v, sizeof(T));
 					return v;
-				}
+				}*/
 			};
 		}
 	}

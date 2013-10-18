@@ -7,8 +7,8 @@ using namespace myun2::nitro3::db;
 
 int main()
 {
-	file_pool f = file_pool("pool.dat");
-	blocked_pool<file_pool> b(f);
+	file_pool f = file_pool("blocked.dat");
+	blocked_pool<file_pool, 1, 1024 * 8, false> b(f);
 
 	//int a = pool.add("aaa");
 	//printf("%s\n", pool.read_s(a).c_str());
